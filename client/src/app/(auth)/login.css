@@ -1,0 +1,16 @@
+.authbg{
+    width: 100%;
+    min-height: 10vh;
+    background: url("/assets/images/login-bg2.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.login-outer{
+    padding: 1%;
+    width: 30%;
+    border: 1px solid #eee;
+    border-radius: 0.2rem;
+}
