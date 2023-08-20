@@ -5,6 +5,7 @@ import { FC, useEffect, useState } from "react";
 import Button from "./Button";
 import Input from "./Input";
 import AutoComplete from "./AutoComplete";
+import { UseFormRegister, useForm } from "react-hook-form";
 
 interface AddUserStepperProps {
   handleChange: (value: string, name: string) => void;
@@ -80,6 +81,12 @@ const USERS: IUser[] = [
 ];
 
 const AddUserStepper: FC<AddUserStepperProps> = ({ handleChange }) => {
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm();
   const [value, setvalue] = useState("");
   const [suggestions, setsuggestions] = useState([] as IUser[]);
 
@@ -87,7 +94,7 @@ const AddUserStepper: FC<AddUserStepperProps> = ({ handleChange }) => {
     setvalue(value);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   useEffect(() => {
     const timeOut = setTimeout(() => {
@@ -116,6 +123,8 @@ const AddUserStepper: FC<AddUserStepperProps> = ({ handleChange }) => {
         label="Add Users"
         extraCss="!w-3/5"
         handleChange={getUserData}
+        id="users"
+        register={register}
       />
       <AutoComplete suggestions={suggestions} />
       <div className="text-md text-slate-600">Collaborators</div>

@@ -9,6 +9,7 @@ export const register = async (req: Request, res: Response) => {
     try {
         if (req.body != null && !!Object.keys(req.body).length) {
             const user: User = req.body;
+            if (user.password && user.password.length < 6) throw new Error(500, "Password requirements not met, length < 6");
             const findUser = await UserSchema.findOne({
                 $or: [{ email: user.email }, { userName: user.userName }],
             });

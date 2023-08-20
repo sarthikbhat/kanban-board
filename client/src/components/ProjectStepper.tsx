@@ -3,12 +3,14 @@ import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
 import { FC, useState } from "react";
 import Button from "./Button";
 import Input from "./Input";
+import { UseFormRegister, useForm } from "react-hook-form";
 
 interface ProjectStepperProps {
   removeColumn: (value: string) => void;
   handleChange: (value: string, name: string) => void;
   columns: string[];
   defaultColumns: string[];
+  register: UseFormRegister<any>;
 }
 
 const ProjectStepper: FC<ProjectStepperProps> = ({
@@ -16,7 +18,10 @@ const ProjectStepper: FC<ProjectStepperProps> = ({
   handleChange,
   columns,
   defaultColumns,
+  register
 }) => {
+
+
   return (
     <>
       <Input
@@ -25,7 +30,9 @@ const ProjectStepper: FC<ProjectStepperProps> = ({
         parentPosition="items-start"
         label="Project Name"
         extraCss="!w-3/5"
-        handleChange={() => {}}
+        handleChange={() => { }}
+        id="projectName"
+        register={register}
       />
       <Input
         type="textarea"
@@ -33,9 +40,11 @@ const ProjectStepper: FC<ProjectStepperProps> = ({
         parentPosition="items-start"
         label="Project Description"
         extraCss="!w-3/5"
-        handleChange={() => {}}
+        handleChange={() => { }}
+        id="projectDescription"
+        register={register}
       />
-      <div className="flex flex-col gap-4">
+      {/* <div className="flex flex-col gap-4">
         <Input
           type="text"
           placeholder="e.g., Test In Progress, Ready To Test..."
@@ -44,6 +53,7 @@ const ProjectStepper: FC<ProjectStepperProps> = ({
           extraCss="!w-3/5"
           id="columns"
           handleChange={handleChange}
+          register={register}
         />
         <span className="ml-2 text-red-500">
           Note: Incase no columns is added,{" "}
@@ -72,7 +82,7 @@ const ProjectStepper: FC<ProjectStepperProps> = ({
             </div>
           );
         })}
-      </div>
+      </div> */}
     </>
   );
 };
