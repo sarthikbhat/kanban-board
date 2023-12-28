@@ -3,8 +3,9 @@ import { Columns, Project } from "../types/Project";
 
 const ColumnSchema = new Schema<Columns>({
     columnName: String,
-    order: Number
-}, { _id: false });
+    order: Number,
+    color:String
+});
 
 const Project = new Schema<Project>({
     projectName: {

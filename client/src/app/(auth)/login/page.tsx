@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import AUTH_INTERCEPTOR from "@/services/ApiUtil";
 
 const Login: FC = ({ }) => {
 
@@ -22,17 +23,18 @@ const Login: FC = ({ }) => {
   const router = useRouter()
 
   const onSubmit = (data: any) => {
-    axios
+    console.log(data);
+
+    AUTH_INTERCEPTOR
       .post("http://localhost:8080/auth/login", data)
       .then((res) => {
-        localStorage.setItem("token", res.data.token)
-        res.data.token = undefined;
-        localStorage.setItem("user", JSON.stringify(res.data))
-        router.push("/home")
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem("token", res.data.token)
+          res.data.token = undefined;
+          window.localStorage.setItem("user", JSON.stringify(res.data))
+          router.push("/home")
+        }
       })
-      .catch((error) => {
-        toast.error(error.response.data);
-      });
 
   }
 

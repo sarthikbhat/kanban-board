@@ -1,5 +1,6 @@
 import { Document } from "mongoose";
 import { User } from "./User";
+import { Task } from "./Task";
 
 export interface Project extends Document {
 
@@ -12,10 +13,24 @@ export interface Project extends Document {
 export interface Columns extends Document {
     columnName: string;
     order: number;
+    color: string;
+    tasks?: Task[];
 }
 
-export enum DefaultColumns {
-    TODO="To Do",
-    INPROGRESS="In Progress",
-    COMPLETED="Completed"
-}
+export const DefaultColumns = [
+    {
+        columnName: 'To Do',
+        color: '#f87171',
+        order: 1
+    },
+    {
+        columnName: 'In Progress',
+        color: '#71f8d4',
+        order: 2
+    },
+    {
+        columnName: 'Completed',
+        color: '#ebb95b',
+        order: 3
+    }
+]

@@ -10,6 +10,7 @@ import axios from "axios";
 import { SignUpFormSchemaResolver } from "@/services/FormSchema";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import AUTH_INTERCEPTOR from "@/services/ApiUtil";
 
 export interface IForm {
   userName: string;
@@ -35,16 +36,15 @@ const Login: FC = ({ }) => {
   const onSubmit = (data: any) => {
     const formData = data as IForm;
     delete formData.confirmPassword;
-    axios
+    AUTH_INTERCEPTOR
       .post("http://localhost:8080/auth/register", formData)
       .then((res) => {
-        localStorage.setItem("token", res.data.token)
-        res.data.token = undefined;
-        localStorage.setItem("user", JSON.stringify(res.data))
-        router.push("/home")
-      })
-      .catch((error) => {
-        toast.error(error.response.data);
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem("token", res.data.token)
+          res.data.token = undefined;
+          window.localStorage.setItem("user", JSON.stringify(res.data))
+          router.push("/home")
+        }
       });
   };
 
@@ -54,7 +54,7 @@ const Login: FC = ({ }) => {
         type: "manual",
         message: "Passwords do not match",
       });
-  }, [errors]);
+  }, [errors, setError]);
 
   useEffect(() => {
     reset({
@@ -65,7 +65,7 @@ const Login: FC = ({ }) => {
       userName: "",
     });
     setapiCalled(false);
-  }, [apiCalled]);
+  }, [apiCalled, reset]);
 
   return (
     <section className="p-10 flex flex-col justify-between h-full w-full">

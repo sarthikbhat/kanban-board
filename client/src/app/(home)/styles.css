@@ -1,0 +1,44 @@
+.hr {
+  z-index: 11;
+  height: 0.1px;
+  opacity: 0.5;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10%;
+}
+
+.tasks-outer::-webkit-scrollbar, .members-outer::-webkit-scrollbar{
+  display: none;
+}
+
+.tasks-outer, .members-outer {
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+}
+
+.outer::-webkit-scrollbar {
+  width: 0.1rem !important;
+  height: 0.1rem !important;
+}
+
+/* Track */
+.outer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+.outer::-webkit-scrollbar-thumb {
+  background: #8d0e0e !important;
+  border-radius: 1px !important;
+  /* width: 1rem; */
+}
+
+/* Handle on hover */
+.outer::-webkit-scrollbar-thumb:hover {
+  background: #b90a0a !important;
+}
+
+.outer::-webkit-scrollbar-corner{
+  background-color: transparent;
+}

@@ -20,8 +20,8 @@ const Button: FC<InputProps> = ({
       type="submit"
       className={
         (type === "filled"
-          ? "bg-purple-400 text-white shadow-lg shadow-purple-300 hover:text-purple-400 hover:bg-white hover:border hover:border-purple-400 hover:shadow-none active:bg-purple-400 active:text-white transition ease-in"
-          : "text-purple-400 border border-purple-400 hover:bg-purple-400 hover:text-white active:text-purple-400 active:bg-white transition ease-in") +
+          ? "bg-[#395886] text-white shadow-lg shadow-[#B1C9EF] hover:text-[#395886] hover:bg-white hover:border hover:border-[#395886] active:bg-[#395886] active:text-white transition ease-in"
+          : "text-[#395886] border border-[#395886] hover:bg-[#395886] hover:text-white active:text-[#395886] active:bg-white transition ease-in") +
         " p-4 rounded-md focus:outline-none mt-2 cursor-pointer " +
         width
       }

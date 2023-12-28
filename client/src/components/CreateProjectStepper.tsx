@@ -7,6 +7,9 @@ import ProjectStepper from "./ProjectStepper";
 import AddUserStepper from "./AddUsersStepper";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import toast from "react-hot-toast";
+import AUTH_INTERCEPTOR from "@/services/ApiUtil";
 
 const DEFAULT_COLUMNS = ["To Do", "In Progress", "Completed"];
 
@@ -35,6 +38,7 @@ const CreateProjectStepper: FC<ProjectStepperProps> = ({
   const [step, setStep] = useState(1);
   const [stage, setstage] = useState("New Project");
   const [columns, setcolumns] = useState(DEFAULT_COLUMNS);
+  const [project, setproject] = useState({} as any);
 
   const handleChange = (value: any, name: string) => {
     if (name === "columns") {
@@ -52,14 +56,6 @@ const CreateProjectStepper: FC<ProjectStepperProps> = ({
   const router = useRouter();
 
   const handleStepper = () => {
-    // if (step == 1) {
-    //   console.log("save project");
-    //   setStep(step + 1)
-    //   setstage("Add Users");
-    // }
-    // else {
-    //   router.push("/home")
-    // }
   };
 
   const {
@@ -70,15 +66,23 @@ const CreateProjectStepper: FC<ProjectStepperProps> = ({
   } = useForm();
 
   const onsubmit = (data: any) => {
-    console.log(data);
     if (step == 1) {
-      console.log("save project");
-      setStep(step + 1)
-      setstage("Add Users");
+      let token = "";
+      if (typeof window !== "undefined")
+        token = window.localStorage.getItem("token") || ""
+        AUTH_INTERCEPTOR.post("http://localhost:8080/project/save-project", data, { headers: { "authorization": token } }).then(res => {
+        setproject(res.data)
+        setStep(step + 1)
+        setstage("Add Users");
+      })
     }
     else {
       router.push("/home")
     }
+  }
+
+  const addUserToProject = (project: any) => {
+    setproject({ ...project })
   }
 
   return (
@@ -102,7 +106,7 @@ const CreateProjectStepper: FC<ProjectStepperProps> = ({
                 register={register}
               />
             ),
-            2: <AddUserStepper handleChange={handleChange} />,
+            2: <AddUserStepper project={project} addUserToProject={addUserToProject} />,
           }[step]
         }
         <div className="flex gap-4">

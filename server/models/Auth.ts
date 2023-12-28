@@ -30,7 +30,6 @@ const User = new Schema<User>({
             validator: (props: string) => props.length > 3,
             message: "Length of the fullname should be > 3",
         },
-        unique: true
     },
     password: {
         type: String,

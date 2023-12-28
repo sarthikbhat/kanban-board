@@ -9,6 +9,7 @@ interface InputProps {
   placeholder: string;
   displayLabel?: boolean;
   extraCss?: string;
+  extraCssForLabel?: string;
   parentPosition?: string;
   handleChange?: (value: string, name: string) => void;
   customChange?: (value: string) => void;
@@ -23,6 +24,7 @@ const Input: FC<InputProps> = ({
   placeholder,
   displayLabel = true,
   extraCss,
+  extraCssForLabel,
   parentPosition = "items-center",
   handleChange,
   customChange,
@@ -48,7 +50,7 @@ const Input: FC<InputProps> = ({
           htmlFor={id}
           className={
             "text-md text-slate-600 self-start " +
-            (parentPosition === "items-center" ? "ml-20" : "") + (error && error[id]?.message ? " !text-red-500" : "")
+            (parentPosition === "items-center" ? "ml-20" : "") + (error && error[id]?.message ? " !text-red-500" : "" +" "+extraCssForLabel )
           }
         >
           {label}
@@ -63,7 +65,7 @@ const Input: FC<InputProps> = ({
           rows={5}
           {...register(id)}
           className={
-            "w-4/5 border rounded-md p-4 focus:outline-none shadow-sm shadow-purple-300 hover:shadow-md hover:shadow-purple-100 resize-none " +
+            "w-4/5 border rounded-md p-4 focus:outline-none shadow-sm shadow-[#B1C9EF] hover:shadow-md hover:shadow-[#D5DEEF] resize-none " +
             (extraCss ? extraCss : "") + (error && error[id]?.message ? " border-red-500" : "")
           }
         ></textarea>
@@ -72,7 +74,7 @@ const Input: FC<InputProps> = ({
           id={id}
           placeholder={placeholder}
           className={
-            "w-4/5 border rounded-md p-4 focus:outline-none shadow-sm shadow-purple-300 hover:shadow-md hover:shadow-purple-100 " +
+            "w-4/5 border rounded-md p-4 focus:outline-none shadow-sm shadow-[#B1C9EF] hover:shadow-md hover:shadow-[#D5DEEF] " +
             (extraCss ? extraCss : "") + (error && error[id]?.message ? " border-red-500" : "")
           }
           type={type}

@@ -46,6 +46,6 @@ export const createToken = (user: User) => {
     console.log(user);
 
     return jwt.sign(user, process.env.TOKEN_KEY, {
-        expiresIn: "30min",
+        expiresIn: "30d",
     });
 };

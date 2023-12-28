@@ -10,7 +10,7 @@ const AuthSide: FC = ({}) => {
         <h1 className="text-8xl tracking-wider text-center font-bold text-white">
           KANBAN BOARD
         </h1>
-        <h4 className="text-2xl tracking-wider text-center font-bold text-purple-100 mt-3">
+        <h4 className="text-2xl tracking-wider text-center font-bold text-[#D5DEEF] mt-3">
           Kan all the boring trackers to ban the slow development
         </h4>
       </span>

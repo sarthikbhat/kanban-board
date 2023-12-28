@@ -1,6 +1,6 @@
 import { configDotenv } from "dotenv";
 import { NextFunction, Request, Response } from "express";
-import jwt, { JsonWebTokenError } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { Schema } from "mongoose";
 import { User } from "../types/User";
 import UserSchema from "../models/Auth";
@@ -11,10 +11,12 @@ configDotenv()
 
 export interface IRequest extends Request {
   user?: Schema.Types.ObjectId;
+  // Authorization:s
 }
 
 export async function authenticate(req: IRequest, res: Response, next: NextFunction) {
   try {
+    // next();
     const token = req.headers.authorization;
     if (token) {
       const verify = jwt.verify(token, process.env.TOKEN_KEY) as {
@@ -27,6 +29,7 @@ export async function authenticate(req: IRequest, res: Response, next: NextFunct
       }
     }
     else {
+      // next()
       handleError(new Error(401, "Unauthorized"), res);
     }
   } catch (error: Error | any) {

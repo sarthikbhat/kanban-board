@@ -32,13 +32,13 @@ export default class App {
     public listen() {
 
         this.app.listen(this.port, () => {
-            console.log(`⚡️Server is running at http://localhost:${this.port}⚡️`);
+            console.log(`Server is running on port ${this.port}⚡️`);
         });
     }
 }
 
 mongoose.connect(process.env.MONGO_URI).then(() => {
-    console.log("Connected with database");
+    console.log(`Connected with database 🎉`);
     const app = new App().listen();
 }).catch(error => {
     console.error("Error Starting The server, Cannot Connect to DB");
