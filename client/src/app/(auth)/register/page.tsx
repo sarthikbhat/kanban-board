@@ -4,11 +4,7 @@ import "../login.css";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-import axios from "axios";
 import { SignUpFormSchemaResolver } from "@/services/FormSchema";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import AUTH_INTERCEPTOR from "@/services/ApiUtil";
 

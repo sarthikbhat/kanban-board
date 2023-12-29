@@ -32,16 +32,13 @@ const CustomSelect: FC<IModalProps> = ({ showList = false, defaultSelectText, op
     const [optionsList, setoptionsList] = useState(options);
 
     useEffect(() => {
-
-        console.log(defaultSelectText);
         document.addEventListener("mousedown", handleClickOutside);
         setdefaultSelectText(defaultSelectText);
-
-
+        
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         }
-    }, [])
+    }, [defaultSelectText])
 
 
     const handleClickOutside = (e: any) => {
@@ -73,7 +70,7 @@ const CustomSelect: FC<IModalProps> = ({ showList = false, defaultSelectText, op
                 onClick={handleListDisplay}
             >
                 {isUser && <div className={"text-xs p-[0.3rem] bg-white border drop-shadow-lg rounded-full self-start" + (defaultSelectTextState === "Assign User" ? " !text-white !drop-shadow-none" : "")}>
-                    {defaultSelectTextState?.split(" ").map((e) => e.charAt(0)).splice(0,2)}
+                    {defaultSelectTextState?.split(" ").map((e) => e.charAt(0)).splice(0, 2)}
                 </div>}
                 {defaultSelectTextState}
                 {/* <div className="flex-[0.3]" /> */}

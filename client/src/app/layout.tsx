@@ -43,7 +43,7 @@ export default function RootLayout({
 
   useEffect(() => {
     setPath(pathName.split("/").pop() || "");
-  }, [])
+  }, [pathName])
 
   return (
     <html lang="en" className="scroll-smooth">

@@ -86,7 +86,7 @@ const AddUserStepper: FC<AddUserStepperProps> = ({ addUserToProject, project }) 
       />
       <AutoComplete addUser={addUser} suggestions={suggestions} />
       <div className="text-md text-slate-600">Collaborators</div>
-      <div className="border p-4 border-1 shadow shadow-slate-100 w-3/5 max-h-72 overflow-hidden overflow-y-auto -mt-8 border rounded scroll-smooth ">
+      <div className="border p-4 shadow shadow-slate-100 w-3/5 max-h-72 overflow-hidden overflow-y-auto -mt-8 rounded scroll-smooth ">
         {users.map((e, index) => {
           return (
             <div

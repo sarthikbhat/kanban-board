@@ -62,7 +62,7 @@ const AddMembersModal: FC<IModalProps> = ({ closeModal ,addUserToProject, projec
         }, 200);
 
         return () => clearTimeout(timeOut);
-    }, [value]);
+    }, [value,projectName]);
 
     return (
         <div className="absolute flex flex-col gap-2 top-[50%] min-w-[40%] max-h-1/4 left-[50%] -translate-x-[50%] -translate-y-[70%] z-30 w-100 p-4 rounded-md bg-slate-100 shadow-lg ">

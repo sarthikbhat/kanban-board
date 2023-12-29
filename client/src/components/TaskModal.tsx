@@ -43,11 +43,9 @@ const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId }
     const {
         register,
         handleSubmit,
-        setValue,
-        formState: { dirtyFields },
+        setValue
     } = useForm({ mode: "onTouched", resolver: TaskSchemaResolver });
 
-    const [value, setvalue] = useState("");
     const [originalTask, setoriginalTask] = useState({} as ITask);
     const [comments, setcomments] = useState({} as Record<string | number, IComment>);
     const pathName = usePathname()
@@ -64,7 +62,6 @@ const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId }
                 else if (val[0] === "assignedTo") setValue(val[0], val[1]?._id);
                 else setValue(val[0], val[1]);
             })
-
         }
 
     }, [])

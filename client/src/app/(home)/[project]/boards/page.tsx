@@ -10,7 +10,7 @@ import FilterListOutlinedIcon from '@mui/icons-material/FilterListOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined';
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -72,7 +72,7 @@ const Boards: FC = () => {
             {!!loading && <Loading />}
             {taskModal &&
                 <>
-                    <div className="absolute w-[100%] h-[100%] top-[0%] left-[0%] bg-black bg-opacity-[0.5] z-20 top-0" />
+                    <div className="absolute w-[100%] h-[100%] left-0 bg-black bg-opacity-[0.5] z-20 top-0" />
                     <TaskModal closeModal={closeModal} task={task || {}} projectUsers={project.users} columnId={columnId} />
                 </>
             }
@@ -137,7 +137,7 @@ const Boards: FC = () => {
                                             })
                                         }
                                     </div>
-                                    <div onClick={() => openModal(column._id)} className="flex gap-2 hover:bg-slate-200 hover:text-slate-800 rounded flex gap-2 transition ease cursor-pointer self-start p-2 text-sm items-center">
+                                    <div onClick={() => openModal(column._id)} className="flex gap-2 hover:bg-slate-200 hover:text-slate-800 rounded transition ease cursor-pointer self-start p-2 text-sm items-center">
                                         <AddOutlinedIcon className="text-lg" />
                                         Add a task</div>
                                 </section>

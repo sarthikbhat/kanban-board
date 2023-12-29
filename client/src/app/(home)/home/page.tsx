@@ -69,8 +69,8 @@ const Home: FC = () => {
     <>
       {!!loading && <Loading />}
       <section className="mt-10 flex flex-col gap-6 relative">
-        <img src="/assets/images/left.svg" className="!fixed -left-10 bottom-0 w-[17%] hidden lg:block" />
-        <img src="/assets/images/right.svg" className="!fixed right-0 -bottom-4 w-[15%] hidden lg:block" />
+        <img src="/assets/images/left.svg" alt="left-side-img-man-working" className="!fixed -left-10 bottom-0 w-[17%] hidden lg:block" />
+        <img src="/assets/images/right.svg" alt="right-side-img-woman-working" className="!fixed right-0 -bottom-4 w-[15%] hidden lg:block" />
         <div className="bg-[#395886] w-full p-[3%] -z-[12] absolute -top-[9%]"></div>
         <div className="w-3/4 relative" style={{ margin: "auto" }}>
           <Input type="text" placeholder="Search Projects" register={register} customChange={handleChange} id="search" extraCss="!p-3" />

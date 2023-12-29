@@ -15,26 +15,9 @@ const DEFAULT_COLUMNS = ["To Do", "In Progress", "Completed"];
 
 
 interface ProjectStepperProps {
-  //   removeColumn: (value: string) => void;
-  //   handleChange: (value: string, name: string) => void;
-  //   // handleStepper: (value: string, name: string) => void;
-  //   columns: string[];
-  //   defaultColumns: string[];
 }
 
-interface IForm {
-  projectName: string;
-  projectDesc: string;
-  columns: string[];
-  users: any[];
-}
-
-const CreateProjectStepper: FC<ProjectStepperProps> = ({
-  // removeColumn,
-  // handleChange,
-  // columns,
-  // defaultColumns,
-}) => {
+const CreateProjectStepper: FC<ProjectStepperProps> = ({ }) => {
   const [step, setStep] = useState(1);
   const [stage, setstage] = useState("New Project");
   const [columns, setcolumns] = useState(DEFAULT_COLUMNS);
@@ -70,7 +53,7 @@ const CreateProjectStepper: FC<ProjectStepperProps> = ({
       let token = "";
       if (typeof window !== "undefined")
         token = window.localStorage.getItem("token") || ""
-        AUTH_INTERCEPTOR.post("/project/save-project", data, { headers: { "authorization": token } }).then(res => {
+      AUTH_INTERCEPTOR.post("/project/save-project", data, { headers: { "authorization": token } }).then(res => {
         setproject(res.data)
         setStep(step + 1)
         setstage("Add Users");

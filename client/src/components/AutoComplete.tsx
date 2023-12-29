@@ -20,7 +20,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({ suggestions, addUser,extraCss="" 
     <section
       id="autocomplete"
       className={
-        "border border-2 shadow-2xl shadow-slate-100 w-3/5 max-h-40 overflow-hidden overflow-y-auto -mt-9 border rounded scroll-smooth z-10" +
+        "shadow-2xl shadow-slate-100 w-3/5 max-h-40 overflow-hidden overflow-y-auto -mt-9 border rounded scroll-smooth z-10" +
         (!!suggestions.length ? "opacity-100 visible" : "opacity-0 invisible") +
         " transition ease-in duration-200 " + extraCss
       }

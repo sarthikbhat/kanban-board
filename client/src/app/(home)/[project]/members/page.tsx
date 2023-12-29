@@ -1,6 +1,6 @@
 "use client"
 import { FC, useEffect, useState } from "react";
-import { RegisterOptions, UseFormRegisterReturn, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import Input from "@/components/Input";
@@ -11,7 +11,7 @@ import SkipPreviousOutlinedIcon from '@mui/icons-material/SkipPreviousOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import AddMembersModal from "@/components/AddMemberModal";
-import { IProject, IUser } from "@/app/addproject/page";
+import { IUser } from "@/app/addproject/page";
 import { usePathname } from "next/navigation";
 import AUTH_INTERCEPTOR from "@/services/ApiUtil";
 import Loading from "@/components/Loading";
@@ -35,10 +35,6 @@ const Members: FC = () => {
         AUTH_INTERCEPTOR.get("/project/get-project-users?projectName=" + decodeURI(pathName.split("/")[1].split("_")[0])).then(res => {
             setUsers([...res.data]);
             setloading(false);
-            // setfilteredUsers([...users?.slice(INITIAL_OFFSET, ITEMS_PER_PAGE)]);
-            // navigateToPage(INITIAL_OFFSET, 1, 1)
-            // console.log(filteredUsers);
-            // console.log(users);
             setcurrentUser(JSON.parse(window.localStorage.getItem("user") || "{}"))
 
         });
@@ -66,7 +62,6 @@ const Members: FC = () => {
     }
 
     const addUserToProject = (user: IUser) => {
-        // const
         const payload = { ...{ projectName: decodeURI(pathName.split("/")[1].split("_")[0]) }, users: [...users, user] }
         AUTH_INTERCEPTOR.post("/project/save-project-users", payload).then((res) => {
             setUsers(res.data.users)
@@ -84,7 +79,7 @@ const Members: FC = () => {
             {!!loading && <Loading />}
             {addMembersOpen &&
                 <>
-                    <div className="absolute w-[100%] h-[100%] top-[0%] left-[0%] bg-black bg-opacity-[0.5] z-20 top-0" />
+                    <div className="absolute w-[100%] h-[100%] left-0 bg-black bg-opacity-[0.5] z-20 top-0" />
                     <AddMembersModal closeModal={closeModal} addUserToProject={addUserToProject} projectName={decodeURI(pathName.split("/")[1].split("_")[0])} />
                 </>
             }
@@ -98,7 +93,7 @@ const Members: FC = () => {
                     </div>
                 </div>
                 <div className="flex-1" />
-                <div onClick={() => setaddMembersOpen(true)} className="flex text-sm gap-2 items-center p-3 px-4 bg-[#395886] h-fit h-fit rounded text-white cursor-pointer">
+                <div onClick={() => setaddMembersOpen(true)} className="flex text-sm gap-2 items-center p-3 px-4 bg-[#395886] h-fit rounded text-white cursor-pointer">
                     <PersonAddOutlinedIcon className="text-lg" />
                     Add Members
                 </div>
