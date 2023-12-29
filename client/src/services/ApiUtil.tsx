@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 
 
 const AUTH_INTERCEPTOR = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
 })
 
 
