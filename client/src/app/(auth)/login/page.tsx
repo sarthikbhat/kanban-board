@@ -26,7 +26,7 @@ const Login: FC = ({ }) => {
     console.log(data);
 
     AUTH_INTERCEPTOR
-      .post("http://localhost:8080/auth/login", data)
+      .post("/auth/login", data)
       .then((res) => {
         if (typeof window !== "undefined") {
           window.localStorage.setItem("token", res.data.token)

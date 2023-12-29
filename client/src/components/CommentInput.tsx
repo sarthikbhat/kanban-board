@@ -29,7 +29,7 @@ const CommentInput: FC<InputProps> = ({
     };
 
     useEffect(()=>{
-        // console.log(process.env. );
+        // console.log(process.env.NEXT_PUBLIC_ANALYTICS_ID);
         
     },[])
 

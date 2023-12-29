@@ -43,7 +43,6 @@ const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId }
     const {
         register,
         handleSubmit,
-        getValues,
         setValue,
         formState: { dirtyFields },
     } = useForm({ mode: "onTouched", resolver: TaskSchemaResolver });
@@ -80,7 +79,7 @@ const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId }
     const onSave = (data: any) => {
         data.comments = Object.values(comments);
         AUTH_INTERCEPTOR
-            .post("http://localhost:8080/task/save-task", data)
+            .post("/task/save-task", data)
             .then((res) => {
                 if (res.data) toast.success("Task created successfully")
                 closeModal(true);
@@ -89,7 +88,7 @@ const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId }
 
     const deleteTask = () => {
         AUTH_INTERCEPTOR
-            .delete("http://localhost:8080/task/delete-task/?taskId=" + task._id)
+            .delete("/task/delete-task/?taskId=" + task._id)
             .then((res) => {
                 if (res.data) toast.success("Task deleted successfully")
                 closeModal(true);
@@ -165,10 +164,10 @@ const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId }
                         <div className="relative flex gap-2 flex-col">
                             <div className="font-medium text-base text-[#395886]">Comments</div>
                             <div className="w-[50%] h-px bg-[#395886]/50 mb-2"></div>
-                            <div className="overflow-scroll min-h-[25vh] h-[20%] pr-[5px] flex flex-col gap-[10px] mb-[2px] pb-[10px] scroll-smooth">
+                            <div key="outerDiv" className="overflow-scroll min-h-[25vh] h-[20%] pr-[5px] flex flex-col gap-[10px] mb-[2px] pb-[10px] scroll-smooth">
                                 <div className="relative">
                                     <CommentInput key="new" value="" id={"commentNew"} handleChange={handleChange} placeholder="Add a comment" parentPosition="items-start !gap-0 " extraCss="!w-full !h-[13vh]" />
-                                    {comments["New"] && <SendIcon className="absolute right-[2px] bottom-[5px] text-[#395886] cursor-pointer text-xl" />}
+                                    {comments["New"] && <SendIcon key="newSend" className="absolute right-[2px] bottom-[5px] text-[#395886] cursor-pointer text-xl" />}
                                 </div>
                                 {
                                     Object.entries(comments).map((val) => {

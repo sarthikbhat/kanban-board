@@ -37,7 +37,7 @@ const Login: FC = ({ }) => {
     const formData = data as IForm;
     delete formData.confirmPassword;
     AUTH_INTERCEPTOR
-      .post("http://localhost:8080/auth/register", formData)
+      .post("/auth/register", formData)
       .then((res) => {
         if (typeof window !== "undefined") {
           window.localStorage.setItem("token", res.data.token)

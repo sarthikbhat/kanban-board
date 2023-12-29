@@ -68,13 +68,13 @@ const Members: FC = () => {
     const addUserToProject = (user: IUser) => {
         // const
         const payload = { ...{ projectName: decodeURI(pathName.split("/")[1].split("_")[0]) }, users: [...users, user] }
-        AUTH_INTERCEPTOR.post("http://localhost:8080/project/save-project-users", payload).then((res) => {
+        AUTH_INTERCEPTOR.post("/project/save-project-users", payload).then((res) => {
             setUsers(res.data.users)
         })
     }
 
     const deleteUser = (user: IUser) => {
-        AUTH_INTERCEPTOR.delete(`http://localhost:8080/project/delete-project-user?projectName=${decodeURI(pathName.split("/")[1].split("_")[0])}&id=${user._id}`).then(res => {
+        AUTH_INTERCEPTOR.delete(`/project/delete-project-user?projectName=${decodeURI(pathName.split("/")[1].split("_")[0])}&id=${user._id}`).then(res => {
             setUsers(res.data);
         })
     }

@@ -70,7 +70,7 @@ const CreateProjectStepper: FC<ProjectStepperProps> = ({
       let token = "";
       if (typeof window !== "undefined")
         token = window.localStorage.getItem("token") || ""
-        AUTH_INTERCEPTOR.post("http://localhost:8080/project/save-project", data, { headers: { "authorization": token } }).then(res => {
+        AUTH_INTERCEPTOR.post("/project/save-project", data, { headers: { "authorization": token } }).then(res => {
         setproject(res.data)
         setStep(step + 1)
         setstage("Add Users");

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { handleError } from "../utils/handleError";
 import { Task } from "../types/Task";
-import TaskSchema, { CommentSchemaToExp } from "../models/Tasks";
+import TaskSchema from "../models/Tasks";
 import { Types } from "mongoose";
 
 export const saveTask = async (req: Request, res: Response) => {

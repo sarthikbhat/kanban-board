@@ -36,7 +36,7 @@ const AddUserStepper: FC<AddUserStepperProps> = ({ addUserToProject, project }) 
 
   const addUser = (user: any) => {
     const payload = { ...project, users: [...project.users, user] }
-    AUTH_INTERCEPTOR.post("http://localhost:8080/project/save-project-users", payload).then(res => {
+    AUTH_INTERCEPTOR.post("/project/save-project-users", payload).then(res => {
       setusers([...users, user])
       addUserToProject(res.data);
     })
@@ -54,7 +54,7 @@ const AddUserStepper: FC<AddUserStepperProps> = ({ addUserToProject, project }) 
           search: value,
           user: JSON.parse(window.localStorage.getItem("user") || "{}")
         }
-        AUTH_INTERCEPTOR.post("http://localhost:8080/project/get-all-users", payload).then(res => {
+        AUTH_INTERCEPTOR.post("/project/get-all-users", payload).then(res => {
           setsuggestions(res.data);
         })
 
@@ -67,7 +67,7 @@ const AddUserStepper: FC<AddUserStepperProps> = ({ addUserToProject, project }) 
   }, [value]);
 
   const deleteUser = (user: IUser) => {
-    // AUTH_INTERCEPTOR.delete(`http://localhost:8080/project/delete-project-user?projectName=${project.projectName}&userName=${user.fullName}`).then(res => {
+    // AUTH_INTERCEPTOR.delete(`/project/delete-project-user?projectName=${project.projectName}&userName=${user.fullName}`).then(res => {
     //   setusers(res.data.users);
     // })
   }

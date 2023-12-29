@@ -6,7 +6,6 @@ import Input from "./Input";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import Button from "./Button";
 import AutoComplete from "./AutoComplete";
-import AUTH_INTERCEPTOR from "@/services/ApiUtil";
 import { IUser } from "@/app/addproject/page";
 import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined';
 import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
