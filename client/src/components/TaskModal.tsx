@@ -1,54 +1,66 @@
 "use client"
-import { usePathname, useRouter } from "next/navigation";
+import { IColumns, ITask, IUser } from "@/app/addproject/page";
+import API_UTIL from "@/services/ApiUtil";
+import { TaskSchemaResolver } from "@/services/FormSchema";
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { usePathname } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import Input from "./Input";
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import Button from "./Button";
-import AutoComplete from "./AutoComplete";
-import AUTH_INTERCEPTOR from "@/services/ApiUtil";
-import { ITask, IUser } from "@/app/addproject/page";
-import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined';
-import CustomSelect from "./CustomSelect";
 import toast from "react-hot-toast";
-import { TaskSchemaResolver } from "@/services/FormSchema";
-import SaveIcon from '@mui/icons-material/Save';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SendIcon from '@mui/icons-material/Send';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import Button from "./Button";
 import CommentInput from "./CommentInput";
-
-interface IComment {
-    comment: string,
-    originalValue?: string,
-    createdAt?: string,
-    updatedAt?: string,
-    isChanged?: boolean
-}
+import CustomSelect from "./CustomSelect";
+import Input from "./Input";
+import CommentIcon from '@mui/icons-material/Comment';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 const IndexToMonthMap: Record<number, string> = {
     0: "Jan", 1: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "June", 7: "July", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"
+}
+
+
+export interface IComment {
+    comment: string;
+    commentedBy?: string;
+    originalValue?: string;
+    createdAt?: string;
+    updatedAt?: string;
+    isChanged?: boolean;
+    _id?: string;
+    edit?: string
 }
 
 interface IModalProps {
     closeModal: (refresh?: boolean) => void;
     task: ITask;
     projectUsers?: IUser[];
+    columns: IColumns[];
     columnId: string;
 }
 
-const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId }) => {
+const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId, columns }) => {
 
     const {
         register,
         handleSubmit,
-        setValue
+        setValue,
+        control,
     } = useForm({ mode: "onTouched", resolver: TaskSchemaResolver });
 
     const [originalTask, setoriginalTask] = useState({} as ITask);
     const [comments, setcomments] = useState({} as Record<string | number, IComment>);
     const pathName = usePathname()
+
+    useEffect(() => {
+        const close = (e: KeyboardEvent) => {
+            if (e.key === "Escape") {
+                closeModal();
+            }
+        }
+        window.addEventListener('keydown', close)
+        return () => window.removeEventListener('keydown', close)
+    }, [])
+
     useEffect(() => {
         setValue("project", pathName.split("/")[1].split("_")[1]);
         setValue("column", columnId);
@@ -57,6 +69,8 @@ const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId }
     useEffect(() => {
         if (task) {
             setoriginalTask(task);
+            console.log(task);
+
             Object.entries(task).forEach((val: any) => {
                 if (val[0] === "comments") setcomments(Object.assign({}, val[1]));
                 else if (val[0] === "assignedTo") setValue(val[0], val[1]?._id);
@@ -74,8 +88,9 @@ const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId }
     }
 
     const onSave = (data: any) => {
+        console.log({ ...comments });
         data.comments = Object.values(comments);
-        AUTH_INTERCEPTOR
+        API_UTIL
             .post("/task/save-task", data)
             .then((res) => {
                 if (res.data) toast.success("Task created successfully")
@@ -84,12 +99,36 @@ const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId }
     }
 
     const deleteTask = () => {
-        AUTH_INTERCEPTOR
+        API_UTIL
             .delete("/task/delete-task/?taskId=" + task._id)
             .then((res) => {
                 if (res.data) toast.success("Task deleted successfully")
                 closeModal(true);
             })
+    }
+
+    const handleChange = (value: string, id: string) => {
+        let index;
+        if (id.split("comment")[1] == "New") index = "New"
+        else index = Number.parseInt(id.split("comment")[1], 10);
+
+        if (index === "New" && (!value.trim().length || value === "<p><br></p>"))
+            delete comments["New"]
+        else if (index !== "New" && value != "<p><br></p>") {
+            let originalValue;
+            if (!comments[index].isChanged) originalValue = comments[index].comment
+            else originalValue = comments[index].originalValue
+            if (value != originalValue)
+                comments[index] = {
+                    ...comments[index], ...{ comment: value, originalValue: originalValue, isChanged: true, edit: "" }
+                };
+            else comments[index] = { ...comments[index], ...{ comment: originalValue, isChanged: false, edit: "" } };
+        }
+        else {
+            comments["New"] = { comment: value }
+        }
+
+        setcomments({ ...comments })
     }
 
     const getUpdatedAt = (time: string | undefined) => {
@@ -104,93 +143,101 @@ const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId }
                 const minutes = Math.round(diff);
                 return `${minutes} minute${minutes > 1 ? "s" : ""} ago`
             }
-            else if (Math.round(diff) > 60 && Math.round(diff) < 60000) return Math.round(diff / 60000) + " hours ago"
+            else if (Math.round(diff / 60) > 0 && Math.round(diff / 60) < 24) {
+                const hours = Math.round(diff / 60);
+                return hours + ` hour${hours > 1 ? "s" : ""} ago`;
+            }
             else {
                 const date = new Date(localTime);
                 const hours = date.getHours() > 12 ? (date.getHours() - 12 < 10 ? "0" : "") + (date.getHours() - 12) : date.getHours();
                 const fullDate = `${IndexToMonthMap[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
-                return `on ${fullDate} at ${hours}:${date.getSeconds()} ${date.getHours() > 12 ? "PM" : "AM"}`
+                return `on ${fullDate} at ${parseInt(hours.toString()) > 10 ? hours : "" + hours}:${parseInt(date.getMinutes().toString()) > 10 ? date.getMinutes() : "0" + date.getMinutes()} ${date.getHours() > 12 ? "PM" : "AM"}`
             }
         }
     }
 
-    const handleChange = (value: string, id: string) => {
-        let index;
-        if (id.split("comment")[1] == "New") index = "New"
-        else index = Number.parseInt(id.split("comment")[1], 10);
-
-        if (index === "New" && !value.trim().length)
-            delete comments["New"]
-        else if (value) {
-            let originalValue;
-            if (!comments[index].isChanged) originalValue = comments[index].comment
-            else originalValue = comments[index].originalValue
-            if (value != originalValue)
-                comments[index] = {
-                    ...comments[index], ...{ comment: value, originalValue: originalValue, isChanged: true }
-                };
-            else comments[index] = { ...comments[index], ...{ comment: originalValue, isChanged: false } };
+    const SaveComment = (comment: string) => {
+        comments[comment].commentedBy = JSON.parse(window.localStorage.getItem("user") || "{}").fullName
+        const data = {
+            comment: comments[comment],
+            taskId: task._id
         }
-        // else continue;
+        API_UTIL.post("/task/save-comment", data).then(({ data }) => {
+            if (comment === "New") {
+                delete comments["New"]
+                let oldComments: any = Object.values(comments);
+                oldComments = [data, ...oldComments]
+                setcomments(Object.assign({}, oldComments))
+            } else {
+                comments[comment] = { ...data, edit: "done" }
+                setcomments({ ...comments })
+            }
+        })
 
-        setcomments({ ...comments })
+
     }
 
     return (
-        <div className="absolute flex flex-col gap-2 top-[50%] min-w-[50%] max-h-1/5 left-[50%] -translate-x-[50%] -translate-y-[50%] z-30 w-100 p-4 px-2 rounded-md bg-slate-100 shadow-lg h-[70vh] overflow-hidden">
+        <div className="absolute flex flex-col gap-2 top-[50%] min-w-[85%] max-h-1/5 left-[50%] -translate-x-[50%] -translate-y-[50%] z-30 w-100 p-4 px-2 rounded-md bg-slate-100 shadow-lg h-[88vh] overflow-hidden">
             <div className="flex flex-col gap-2">
-                <div className="text-md text-[#395886] font-semibold flex px-4 relative items-center gap-4">
-                    <span className="flex-1 text-2xl">{!!Object.keys(task).length ?  task.taskName : 'Add Task'}</span>
-                    {/* <div className="self-end flex gap-2">
-                        {
-                            !!Object.keys(task).length
-                            &&
-                            <DeleteIcon onClick={() => deleteTask()} className="self-end cursor-pointer text-red-600 hover:text-red-600 hover:scale-105 transition ease-in" />
-                        }
-                        <SaveIcon onClick={handleSubmit(data => onSave(data))} className="self-end cursor-pointer hover:scale-105 transition ease-in" />
-                    </div> */}
-                    <CloseOutlinedIcon onClick={() => closeModal()} className="text-black self-end cursor-pointer" />
+                <div className="text-md text-[#395886] font-semibold flex px-4 relative items-center gap-4 min-h-[7.2vh]">
+                    {/* <span className="flex-1 text-2xl">{!!Object.keys(task).length ? task.taskName : 'Add Task'}</span> */}
+                    <Input control={control} id="taskName" type="text" placeholder="Task Name" register={register} parentPosition="items-start !gap-0 flex-1 rounded-md hover:border border-[#000]/60 " extraCss="!w-full !flex-1 !text-2xl !p-2 text-sm !bg-transparent !shadow-none hover:shadow-none border-none" />
+                    <CloseOutlinedIcon onClick={() => closeModal()} className="text-black self-center cursor-pointer" />
                 </div>
                 <div className="flex gap-2">
-                    <div className="flex flex-col p-4 gap-4 flex-1">
-                        <div className="flex items-center gap-4 justify-center">
-                            <CustomSelect setData={onData} showList={false} defaultSelectText={!!Object.keys(task).length ? task?.assignedTo?.fullName : 'Assign User'} options={projectUsers || []} extraCss="pl-5 flex items-center gap-4 bg-white border rounded-md p-[0.3rem] text-sm focus:outline-none shadow-sm shadow-[#B1C9EF] hover:shadow-md hover:shadow-[#D5DEEF] mt-[2px]" />
-                            <Input id="taskName" type="text" placeholder="Task Name" register={register} parentPosition="items-start !gap-0 " extraCss="!w-full !p-2 text-sm" />
+                    <div className="flex flex-col p-4 gap-4 flex-1 pt-[1.5vw]">
+                        <div className="flex items-center gap-6 flex-wrap">
+                            <CustomSelect id="user" setData={onData} isUser={true} showList={false} defaultSelectText={!!Object.keys(task).length ? task?.assignedTo?.fullName : 'Assign User'} options={projectUsers || []} parentCss="flex-[0.6]" extraCss="pl-5 flex items-center gap-4 bg-white border rounded-md p-[0.3rem] text-sm focus:outline-none shadow-sm shadow-[#B1C9EF] hover:shadow-md hover:shadow-[#D5DEEF] mt-[2px]" />
+                            <div className="flex gap-5 flex-[1] justify-between">
+                                <div className=" text-xs flex gap-2 items-center"> <CommentIcon className="text-base" /> {originalTask?.comments?.length} Comments</div>
+                                <div className="text-xs"><AccessTimeIcon className="text-base" /> Last Updated By Sarthik Bhat, {getUpdatedAt(originalTask?.updatedAt)}</div>
+                            </div>
+                            {/* <Input control={control} id="taskName" type="text" placeholder="Task Name" register={register} parentPosition="items-start !gap-0 flex-1 " extraCss="!w-full !p-2 text-sm" /> */}
                         </div>
-                        <Input id="taskDesc" type="textarea" placeholder="Add a description for others to know about the task in detail" register={register} parentPosition="items-start !gap-0 " extraCss="!w-full !text-sm" />
+                        <Input control={control} id="taskDesc" type="textarea" placeholder="Add a description for others to know about the task in detail" register={register} parentPosition="items-start !gap-0 " extraCss="!w-full !text-sm" />
                         <div className="relative flex gap-2 flex-col">
                             <div className="font-medium text-base text-[#395886]">Comments</div>
                             <div className="w-[50%] h-px bg-[#395886]/50 mb-2"></div>
-                            <div key="outerDiv" className="overflow-scroll min-h-[25vh] h-[20%] pr-[5px] flex flex-col gap-[10px] mb-[2px] pb-[10px] scroll-smooth">
-                                <div className="relative">
-                                    <CommentInput key="new" value="" id={"commentNew"} handleChange={handleChange} placeholder="Add a comment" parentPosition="items-start !gap-0 " extraCss="!w-full !h-[13vh]" />
-                                    {comments["New"] && <SendIcon key="newSend" className="absolute right-[2px] bottom-[5px] text-[#395886] cursor-pointer text-xl" />}
+                            <div className="overflow-scroll h-[35vh]  pr-[5px] flex flex-col gap-[10px] mb-[2px] pb-[10px] scroll-smooth">
+                                <div key="newCommentKey" className="relative flex flex-col">
+                                    <CommentInput key="newComment" type="new" value={comments["New"]?.comment || ""} id={"commentNew"} handleChange={handleChange} placeholder="Add a comment" parentPosition="items-start " extraCss={"!w-full pt-[2%] !min-h-[13vh] " + (!comments["New"] ? "mb-[8%]" : "")} />
+                                    {comments["New"] && (
+                                        <div className="self-end flex gap-2 mb-[2%]">
+                                            <div onClick={() => SaveComment("New")} key="newCancel" className="right-[2px]  bottom-[5px] bg-[#395886] cursor-pointer text-[0.8rem] text-white p-1 px-2 mt-[44%] rounded-sm" >Cancel</div>
+                                            <div onClick={() => SaveComment("New")} key="newSend" className="right-[2px]  bottom-[5px] bg-[#395886] cursor-pointer text-[0.8rem] text-white p-1 px-2 mt-[44%] rounded-sm" >Send</div>
+                                        </div>
+                                    )}
                                 </div>
                                 {
                                     Object.entries(comments).map((val) => {
                                         return (
-                                            val[0] != "New"
-                                            &&
-                                            <>
-                                                <div key={val[0]} className="relative">
-                                                    <CommentInput value={val[1].comment} id={"comment" + val[0]} handleChange={handleChange} placeholder="Add a comment" parentPosition="items-start !gap-0 " extraCss="!w-full !h-[13vh] pt-[5%]" />
-                                                    {val[1].isChanged && <SendIcon className="absolute right-[2px] bottom-[5px] text-[#395886] cursor-pointer text-xl" />}
-                                                    <div className="text-xs absolute top-[7px] left-[10px] text-[#000]/50 flex items-center gap-2"><div className="font-medium text-underline">Sarthik Bhat</div><div>{getUpdatedAt(val[1]?.updatedAt)}</div></div>
+                                            <div key={val[0]}>{
+                                                val[0] != "New"
+                                                &&
+                                                <div key={val[0]} className="relative flex flex-col">
+                                                    <CommentInput key={"comment_" + val[0]} commentData={val[1]} type="comments" value={val[1].comment} id={"comment" + val[0]} handleChange={handleChange} placeholder="Add a comment" parentPosition="items-start " extraCss="!w-full pb-[6vh] !min-h-[13vh]" />
+                                                    {val[1].isChanged && (
+                                                        <div className="self-end flex gap-2">
+                                                            <div onClick={() => SaveComment(val[0])} key={"cancel_" + val[0]} className="right-[2px]  bottom-[5px] bg-[#395886] cursor-pointer text-[0.8rem] text-white p-1 px-2 mt-2 rounded-sm" >Cancel</div>
+                                                            <div onClick={() => val[1].isChanged && SaveComment(val[0])} key={"send_" + val[0]} className="right-[2px]  bottom-[5px] bg-[#395886] cursor-pointer text-[0.8rem] text-white p-1 px-2 mt-2 rounded-sm" >Send</div>
+                                                        </div>
+                                                    )}
                                                 </div>
-                                            </>
+                                            }
+                                            </div>
                                         )
                                     })
                                 }
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col gap-4 items-center justify-start p-4 h-[63vh]">
-                        <CustomSelect setData={onData} showList={false} defaultSelectText={!!Object.keys(task).length ? task.priority : 'Priority'} isUser={false} options={['High', 'Medium', 'Low']} extraCss="flex items-center bg-white focus:outline-none border rounded-md p-2 text-sm focus:outline-none shadow-sm shadow-[#B1C9EF] hover:shadow-md hover:shadow-[#D5DEEF] mt-[2px]" />
-                        <Input id="estimation" type="number" placeholder="Estimated days to finish" register={register} parentPosition="items-start !gap-0 " extraCss="!w-full !p-2 !text-sm" />
-                        <Input id="actual" type="number" placeholder="Actual days taken to finish" register={register} parentPosition="items-start !gap-0 " extraCss="!w-full !p-2 !text-sm" />
+                    <div className="flex flex-[0.3] flex-col gap-4 items-center justify-start p-4 h-[78vh] pt-0">
+                        <CustomSelect displayLabel={true} id="priority" label="Priority" extraCssForLabel="text-[0.8vw]" setData={onData} showList={false} defaultSelectText={!!Object.keys(task).length ? task.priority : 'Priority'} isUser={false} options={['High', 'Medium', 'Low']} extraCss="flex items-center bg-white focus:outline-none border rounded-md p-2 text-sm focus:outline-none shadow-sm shadow-[#B1C9EF] hover:shadow-md hover:shadow-[#D5DEEF] mt-[2px]" />
+                        <CustomSelect displayLabel={true} id="state" label="State" extraCssForLabel="text-[0.8vw]" disabled={true} setData={() => { }} isState={true} showList={false} defaultSelectText={!!columnId ? columns.filter((e: IColumns) => e._id === columnId)[0].columnName : 'State'} isUser={false} colors={columns.reduce((acc: Record<string, string>, curr: IColumns) => ({ ...acc, [curr.columnName]: curr.color }), {})} options={columns.map((e: IColumns) => e.columnName)} extraCss="flex items-center bg-white focus:outline-none border rounded-md p-2 text-sm focus:outline-none shadow-sm shadow-[#B1C9EF] hover:shadow-md hover:shadow-[#D5DEEF] mt-[2px] gap-4 px-5" />
+                        <Input label="Estimation" extraCssForLabel="text-[0.8vw]" control={control} id="estimation" type="number" placeholder="Estimated days to finish" register={register} parentPosition="items-start !gap-0 " extraCss="!w-full !p-2 !text-sm" />
+                        <Input label="Actual" extraCssForLabel="text-[0.8vw]" control={control} id="actual" type="number" placeholder="Actual days taken to finish" register={register} parentPosition="items-start !gap-0 " extraCss="!w-full !p-2 !text-sm" />
                         <div className="flex-1"></div>
-                        {/* <div className="flex"> */}
-                        {/* <div className="flex-1"></div> */}
                         <div className="flex gap-[10px] w-[100%]">
                             {
                                 !!Object.keys(task).length
@@ -200,14 +247,10 @@ const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId }
                         hover:text-red-600 !hover:bg-white hover:border hover:border-red-600 active:bg-red-600 active:text-white transition ease-in" />
                                 </div>
                             }
-                            <div onClick={handleSubmit(data => {
-                                console.log(data);
-                                onSave(data)
-                            })} className="flex items-center justify-end text-sm font-base text-purple-700 flex-1">
+                            <div onClick={handleSubmit(data => { onSave(data) })} className="flex items-center justify-end text-sm font-base text-purple-700 flex-1">
                                 <Button text="Save" width="!w-[20%] max-w-[160px] !p-2 flex-1" />
                             </div>
                         </div>
-                        {/* </div> */}
                     </div>
                 </div>
             </div>

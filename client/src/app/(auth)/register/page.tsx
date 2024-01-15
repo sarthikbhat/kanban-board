@@ -1,12 +1,12 @@
 "use client";
-import { FC, useEffect, useState } from "react";
-import "../login.css";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import { useForm } from "react-hook-form";
+import API_UTIL from "@/services/ApiUtil";
 import { SignUpFormSchemaResolver } from "@/services/FormSchema";
 import { useRouter } from "next/navigation";
-import AUTH_INTERCEPTOR from "@/services/ApiUtil";
+import { FC, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import "../login.css";
 
 export interface IForm {
   userName: string;
@@ -23,6 +23,7 @@ const Login: FC = ({ }) => {
     handleSubmit,
     setError,
     reset,
+    control,
     formState: { errors },
   } = useForm({ mode: "onTouched", resolver: SignUpFormSchemaResolver });
 
@@ -32,7 +33,7 @@ const Login: FC = ({ }) => {
   const onSubmit = (data: any) => {
     const formData = data as IForm;
     delete formData.confirmPassword;
-    AUTH_INTERCEPTOR
+    API_UTIL
       .post("/auth/register", formData)
       .then((res) => {
         if (typeof window !== "undefined") {
@@ -65,7 +66,7 @@ const Login: FC = ({ }) => {
 
   return (
     <section className="p-10 flex flex-col justify-between h-full w-full">
-      <h1 className="text-2xl tracking-wide text-left font-semibold">
+      <h1 className="text-xl tracking-wide text-left font-semibold">
         Sign Up
       </h1>
       <form
@@ -77,55 +78,60 @@ const Login: FC = ({ }) => {
           label="Full Name"
           type="text"
           placeholder="John Doe"
-          extraCss="!w-full"
-          parentPosition="!items-start"
+          extraCss="!w-full !p-2 !text-xs"
+          parentPosition="!items-start text-sm"
           register={register}
           error={errors}
+          control={control}
         />
         <Input
           id="userName"
           label="UserName"
           type="text"
           placeholder="JohnDoe29"
-          extraCss="!w-full"
-          parentPosition="!items-start"
+          extraCss="!w-full !p-2 !text-xs"
+          parentPosition="!items-start text-sm"
           register={register}
           error={errors}
+          control={control}
         />
         <Input
           id="email"
           label="Email"
           type="email"
           placeholder="john.doe@email.com"
-          extraCss="!w-full"
-          parentPosition="!items-start"
+          extraCss="!w-full !p-2 !text-xs"
+          parentPosition="!items-start text-sm"
           register={register}
           error={errors}
+          control={control}
         />
         <Input
           id="password"
           label="Password"
           type="password"
           placeholder="***********"
-          extraCss="!w-full"
-          parentPosition="!items-start"
+          extraCss="!w-full !p-2 !text-xs"
+          parentPosition="!items-start text-sm"
           register={register}
           error={errors}
+          control={control}
         />
         <Input
           id="confirmpassword"
           label="Confirm Password"
           type="password"
           placeholder="***********"
-          extraCss="!w-full"
-          parentPosition="!items-start"
+          extraCss="!w-full !p-2 !text-xs"
+          parentPosition="!items-start text-sm"
           register={register}
           error={errors}
+          control={control}
         />
-        <Button text="Register" width="!w-full" />
+        <Button text="Register" width="!w-full !p-2 text-sm" />
       </form>
-      <h1 className="text-left">
-        Already a member? <span className="underline">log In Now</span>
+      <h1 className="text-left text-sm">
+        Already a member? <span className="underline cursor-pointer" onClick={() => router.push("/login")}>log In Now</span>
       </h1>
     </section>
   );

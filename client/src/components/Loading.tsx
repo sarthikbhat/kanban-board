@@ -1,6 +1,5 @@
 "use client";
-import { FC, HTMLInputTypeAttribute, useState } from "react";
-import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
+import { FC } from "react";
 
 interface InputProps {
 }

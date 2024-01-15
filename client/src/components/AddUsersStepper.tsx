@@ -1,15 +1,11 @@
 "use client";
-import DeleteOutlineTwoToneIcon from "@mui/icons-material/DeleteOutlineTwoTone";
-import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
-import { FC, useEffect, useState } from "react";
-import Button from "./Button";
-import Input from "./Input";
-import AutoComplete from "./AutoComplete";
-import { UseFormRegister, useForm } from "react-hook-form";
-import axios from "axios";
-import toast from "react-hot-toast";
 import { IProject, IUser } from "@/app/addproject/page";
-import AUTH_INTERCEPTOR from "@/services/ApiUtil";
+import API_UTIL from "@/services/ApiUtil";
+import DeleteOutlineTwoToneIcon from "@mui/icons-material/DeleteOutlineTwoTone";
+import { FC, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import AutoComplete from "./AutoComplete";
+import Input from "./Input";
 
 interface AddUserStepperProps {
   addUserToProject: (user: any) => void;
@@ -22,6 +18,7 @@ const AddUserStepper: FC<AddUserStepperProps> = ({ addUserToProject, project }) 
     register,
     handleSubmit,
     setError,
+    control,
     formState: { errors },
   } = useForm();
   const [value, setvalue] = useState("");
@@ -36,7 +33,7 @@ const AddUserStepper: FC<AddUserStepperProps> = ({ addUserToProject, project }) 
 
   const addUser = (user: any) => {
     const payload = { ...project, users: [...project.users, user] }
-    AUTH_INTERCEPTOR.post("/project/save-project-users", payload).then(res => {
+    API_UTIL.post("/project/save-project-users", payload).then(res => {
       setusers([...users, user])
       addUserToProject(res.data);
     })
@@ -54,7 +51,7 @@ const AddUserStepper: FC<AddUserStepperProps> = ({ addUserToProject, project }) 
           search: value,
           user: JSON.parse(window.localStorage.getItem("user") || "{}")
         }
-        AUTH_INTERCEPTOR.post("/project/get-all-users", payload).then(res => {
+        API_UTIL.post("/project/get-all-users", payload).then(res => {
           setsuggestions(res.data);
         })
 
@@ -67,7 +64,7 @@ const AddUserStepper: FC<AddUserStepperProps> = ({ addUserToProject, project }) 
   }, [value]);
 
   const deleteUser = (user: IUser) => {
-    // AUTH_INTERCEPTOR.delete(`/project/delete-project-user?projectName=${project.projectName}&userName=${user.fullName}`).then(res => {
+    // API_UTIL.delete(`/project/delete-project-user?projectName=${project.projectName}&userName=${user.fullName}`).then(res => {
     //   setusers(res.data.users);
     // })
   }
@@ -82,6 +79,7 @@ const AddUserStepper: FC<AddUserStepperProps> = ({ addUserToProject, project }) 
         extraCss="!w-3/5"
         handleChange={getUserData}
         id="users"
+        control={control}
         register={register}
       />
       <AutoComplete addUser={addUser} suggestions={suggestions} />

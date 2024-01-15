@@ -1,33 +1,51 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
+import { useRouter } from "next/navigation";
+import { createContext, useContext, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 
+export const LoadingContext = createContext({
+  isLoading: true,
+  setIsLoading: (loading: boolean) => { }
+});
 
-const AUTH_INTERCEPTOR = axios.create({
+const API_UTIL = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
 })
 
+function AUTHINTERCEPTOR({ children }: any) {
+  const { setIsLoading } = useContext(LoadingContext);
+
+  const router = useRouter();
+
+  const isScreenMounted = useRef(true)
+  useEffect(() => {
+    return () => { isScreenMounted.current = false }
+  }, [])
+
+  API_UTIL.interceptors.request.use((config) => {
+    if (!config.url?.includes("/auth/") && (typeof window !== "undefined")) {
+      config.headers.Authorization = window.localStorage.getItem("token")
+    }
+    return config
+  })
+
+  API_UTIL.interceptors.response.use((response) => {
+    isScreenMounted && setIsLoading(false)
+    return response
+  }, (error: AxiosError) => {
+    isScreenMounted && setIsLoading(false)
+    if (error.response?.status === 401 || error.response?.data === "jwt expired") {
+      router.push("/login");
+      toast.error(error.response?.data as string)
+    }
+    else toast.error(error.response?.data as string)
+    return Promise.reject(error);
+
+  })
 
 
-AUTH_INTERCEPTOR.interceptors.request.use((config) => {
+  return children;
+}
 
-  if (!config.url?.includes("/auth/") && (typeof window !== "undefined")) {
-    config.headers.Authorization = window.localStorage.getItem("token")
-  }
-  return config
-})
-
-AUTH_INTERCEPTOR.interceptors.response.use((response) => {
-
-  return response
-}, (error: AxiosError) => {
-  if (error.response?.status === 401 || error.response?.data === "jwt expired") {
-    toast.error(error.response?.data as string)
-  }
-  else toast.error(error.response?.data as string)
-  // return error
-  return Promise.reject(error);
-
-})
-
-
-export default AUTH_INTERCEPTOR;
+export default API_UTIL;
+export { AUTHINTERCEPTOR }

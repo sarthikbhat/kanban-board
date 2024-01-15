@@ -1,9 +1,6 @@
 "use client";
-import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
-import { FC, useEffect, useState } from "react";
-import Button from "./Button";
-import Input from "./Input";
 import { IUser } from "@/app/addproject/page";
+import { FC } from "react";
 
 interface AutoCompleteProps {
   suggestions: IUser[];

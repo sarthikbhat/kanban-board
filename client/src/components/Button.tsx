@@ -16,7 +16,6 @@ const Button: FC<InputProps> = ({
   return (
     <input
       value={text}
-      onClick={onClick}
       type="submit"
       className={
         (type === "filled"
@@ -25,8 +24,7 @@ const Button: FC<InputProps> = ({
         " p-4 rounded-md focus:outline-none mt-2 cursor-pointer " +
         width
       }
-    >
-    </input>
+    />
   );
 };
 

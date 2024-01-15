@@ -1,5 +1,6 @@
 "use client";
 import CreateProjectStepper from "@/components/CreateProjectStepper";
+import { IComment } from "@/components/TaskModal";
 import { FC } from "react";
 
 export interface IUser {
@@ -9,7 +10,7 @@ export interface IUser {
   email?: string;
   password?: string;
   token?: string;
-  _id:string
+  _id: string
 }
 
 export interface IProject {
@@ -19,7 +20,7 @@ export interface IProject {
   columns: IColumns[];
   users: IUser[];
   tasks: any[];
-  starred?:boolean;
+  starred?: boolean;
   _id: string
 }
 
@@ -28,7 +29,7 @@ export interface IColumns {
   order: number;
   color: string;
   tasks: ITask[];
-  _id:string
+  _id: string
 }
 
 export interface ITask {
@@ -39,8 +40,11 @@ export interface ITask {
   actual?: number,
   assignedTo: IUser,
   project: IProject,
-  column: IColumns,
-  _id?: string
+  column: string,
+  columnId: string,
+  comments: IComment[],
+  _id?: string,
+  updatedAt?: string
 }
 
 const AddProject: FC = ({ }) => {

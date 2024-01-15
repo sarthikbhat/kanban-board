@@ -5,27 +5,23 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { LoginSchemaResolver } from "@/services/FormSchema";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import AUTH_INTERCEPTOR from "@/services/ApiUtil";
+import API_UTIL from "@/services/ApiUtil";
+import React from "react";
 
 const Login: FC = ({ }) => {
 
   const {
     register,
     handleSubmit,
-    setError,
-    reset,
+    control,
     formState: { errors },
-  } = useForm({ mode: "onTouched", resolver: LoginSchemaResolver });
+  } = useForm({ mode: 'onTouched', resolver: LoginSchemaResolver });
 
   const router = useRouter()
 
   const onSubmit = (data: any) => {
-    console.log(data);
-
-    AUTH_INTERCEPTOR
+    API_UTIL
       .post("/auth/login", data)
       .then((res) => {
         if (typeof window !== "undefined") {
@@ -40,16 +36,16 @@ const Login: FC = ({ }) => {
 
   return (
     <section className="p-10 flex flex-col justify-between h-full w-full">
-      <h1 className="text-2xl tracking-wide text-left font-semibold">Log In</h1>
+      <h1 className="text-xl tracking-wide text-left font-semibold">Log In</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-10 items-center">
         <Input
           id="email"
           label="Email"
           type="email"
           placeholder="john.doe@email.com"
-          handleChange={() => { }}
-          extraCss="!w-full"
-          parentPosition="!items-start"
+          control={control}
+          extraCss="!w-full !p-2 !text-xs"
+          parentPosition="!items-start !text-sm"
           register={register}
           error={errors}
         />
@@ -57,17 +53,17 @@ const Login: FC = ({ }) => {
           id="password"
           label="Password"
           type="password"
+          control={control}
           placeholder="***********"
-          handleChange={() => { }}
-          extraCss="!w-full"
-          parentPosition="!items-start"
+          extraCss="!w-full !p-2 !text-xs"
+          parentPosition="!items-start !text-sm"
           register={register}
           error={errors}
         />
-        <Button text="Login" width="!w-full" />
+        <Button text="Login" width="!w-full !p-2 !text-sm" />
       </form>
-      <h1 className="text-left">
-        Not a Member Yet? <span className="underline">Sign Up Now</span>
+      <h1 className="text-left !text-sm">
+        Not a Member Yet? <span className="underline cursor-pointer" onClick={() => router.push("/register")}>Sign Up Now</span>
       </h1>
     </section>
   );

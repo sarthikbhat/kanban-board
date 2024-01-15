@@ -1,26 +1,25 @@
 "use client"
-import { FC, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import { IUser } from "@/app/addproject/page";
+import AddMembersModal from "@/components/AddMemberModal";
 import Input from "@/components/Input";
-import NavigateNextOutlinedIcon from '@mui/icons-material/NavigateNextOutlined';
-import NavigateBeforeOutlinedIcon from '@mui/icons-material/NavigateBeforeOutlined';
-import SkipNextOutlinedIcon from '@mui/icons-material/SkipNextOutlined';
-import SkipPreviousOutlinedIcon from '@mui/icons-material/SkipPreviousOutlined';
+import API_UTIL from "@/services/ApiUtil";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
-import AddMembersModal from "@/components/AddMemberModal";
-import { IUser } from "@/app/addproject/page";
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import NavigateBeforeOutlinedIcon from '@mui/icons-material/NavigateBeforeOutlined';
+import NavigateNextOutlinedIcon from '@mui/icons-material/NavigateNextOutlined';
+import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
+import SkipNextOutlinedIcon from '@mui/icons-material/SkipNextOutlined';
+import SkipPreviousOutlinedIcon from '@mui/icons-material/SkipPreviousOutlined';
 import { usePathname } from "next/navigation";
-import AUTH_INTERCEPTOR from "@/services/ApiUtil";
-import Loading from "@/components/Loading";
+import { FC, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 const ITEMS_PER_PAGE = 8
 const INITIAL_OFFSET = 0
 
 const Members: FC = () => {
 
-    const { register } = useForm();
+    const { register,control } = useForm();
     const pathName = usePathname();
 
     const [users, setUsers] = useState([] as IUser[])
@@ -32,7 +31,7 @@ const Members: FC = () => {
     const [currentUser, setcurrentUser] = useState({} as IUser)
 
     useEffect(() => {
-        AUTH_INTERCEPTOR.get("/project/get-project-users?projectName=" + decodeURI(pathName.split("/")[1].split("_")[0])).then(res => {
+        API_UTIL.get("/project/get-project-users?projectName=" + decodeURI(pathName.split("/")[1].split("_")[0])).then(res => {
             setUsers([...res.data]);
             setloading(false);
             setcurrentUser(JSON.parse(window.localStorage.getItem("user") || "{}"))
@@ -63,20 +62,19 @@ const Members: FC = () => {
 
     const addUserToProject = (user: IUser) => {
         const payload = { ...{ projectName: decodeURI(pathName.split("/")[1].split("_")[0]) }, users: [...users, user] }
-        AUTH_INTERCEPTOR.post("/project/save-project-users", payload).then((res) => {
+        API_UTIL.post("/project/save-project-users", payload).then((res) => {
             setUsers(res.data.users)
         })
     }
 
     const deleteUser = (user: IUser) => {
-        AUTH_INTERCEPTOR.delete(`/project/delete-project-user?projectName=${decodeURI(pathName.split("/")[1].split("_")[0])}&id=${user._id}`).then(res => {
+        API_UTIL.delete(`/project/delete-project-user?projectName=${decodeURI(pathName.split("/")[1].split("_")[0])}&id=${user._id}`).then(res => {
             setUsers(res.data);
         })
     }
 
     return (
         <section className="flex flex-col gap-2 p-4 px-6 w-full">
-            {!!loading && <Loading />}
             {addMembersOpen &&
                 <>
                     <div className="absolute w-[100%] h-[100%] left-0 bg-black bg-opacity-[0.5] z-20 top-0" />
@@ -99,7 +97,7 @@ const Members: FC = () => {
                 </div>
             </div>
             <div className="h-full flex flex-col gap-4 flex-1 w-4/5 text-sm" style={{ maxHeight: '100%', overflowX: 'scroll' }}>
-                <Input id="searchMembers" type="text" placeholder="Search Members" register={register} parentPosition="flex-start" extraCss="!text-slate-700 !w-1/3 !p-2 !text-sm" />
+                <Input control={control} id="searchMembers" type="text" placeholder="Search Members" register={register} parentPosition="flex-start" extraCss="!text-slate-700 !w-1/3 !p-2 !text-sm" />
                 <div className=" group px-4 py-3 flex gap-4 items-center bg-[#395886] rounded text-white">
                     <div className="flex gap-2 flex-[0.6] text-sm items-center">
                         <AccountCircleOutlinedIcon className="text-lg" />

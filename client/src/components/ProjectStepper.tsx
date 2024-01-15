@@ -3,7 +3,7 @@ import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
 import { FC, useState } from "react";
 import Button from "./Button";
 import Input from "./Input";
-import { UseFormRegister, useForm } from "react-hook-form";
+import { Control, UseFormRegister, useForm } from "react-hook-form";
 
 interface ProjectStepperProps {
   removeColumn: (value: string) => void;
@@ -11,6 +11,7 @@ interface ProjectStepperProps {
   columns: string[];
   defaultColumns: string[];
   register: UseFormRegister<any>;
+  control:Control<any>
 }
 
 const ProjectStepper: FC<ProjectStepperProps> = ({
@@ -18,7 +19,8 @@ const ProjectStepper: FC<ProjectStepperProps> = ({
   handleChange,
   columns,
   defaultColumns,
-  register
+  register,
+  control
 }) => {
 
 
@@ -33,6 +35,7 @@ const ProjectStepper: FC<ProjectStepperProps> = ({
         handleChange={() => { }}
         id="projectName"
         register={register}
+        control={control}
       />
       <Input
         type="textarea"
@@ -43,6 +46,7 @@ const ProjectStepper: FC<ProjectStepperProps> = ({
         handleChange={() => { }}
         id="projectDescription"
         register={register}
+        control={control}
       />
     </>
   );

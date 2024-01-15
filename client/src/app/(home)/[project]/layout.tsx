@@ -1,13 +1,7 @@
 "use client"
-import Navbar from "@/components/Navbar";
-import "../styles.css"
-import { usePathname } from "next/navigation";
 import SideMenu from "@/components/SideMenu";
-import Head from "next/head";
-
-// export const metadata: Metadata = {
-//   title: "Kanban - Home",
-// };
+import "../styles.css";
+import { AnimatePresence } from "framer-motion";
 
 interface ILayout {
     children: React.ReactNode;
@@ -16,11 +10,12 @@ interface ILayout {
 export default function RootLayout({ children }: ILayout) {
 
     return (
-        <>
+        <AnimatePresence mode="wait" initial={false}>
+
             <main className="flex bg-slate-100/10 h-[92vh]">
                 <SideMenu />
                 {children}
             </main>
-        </>
+        </AnimatePresence>
     );
 }

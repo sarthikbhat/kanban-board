@@ -6,6 +6,8 @@ const CommentSchema = new Schema<Comments>({
     commentedBy: String,
 }, { timestamps: true, });
 
+export {CommentSchema};
+
 const Task = new Schema<Task>({
     taskName: {
         type: String,

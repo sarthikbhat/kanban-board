@@ -1,14 +1,13 @@
 "use client"
+import { IUser } from "@/app/addproject/page";
+import API_UTIL from "@/services/ApiUtil";
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined';
 import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import Input from "./Input";
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import Button from "./Button";
 import AutoComplete from "./AutoComplete";
-import AUTH_INTERCEPTOR from "@/services/ApiUtil";
-import { IUser } from "@/app/addproject/page";
-import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined';
+import Input from "./Input";
 
 interface IModalProps {
     closeModal: () => void;
@@ -23,6 +22,7 @@ const AddMembersModal: FC<IModalProps> = ({ closeModal ,addUserToProject, projec
         handleSubmit,
         setError,
         setValue,
+        control,
         formState: { errors },
     } = useForm();
     const [value, setvalue] = useState("");
@@ -52,7 +52,7 @@ const AddMembersModal: FC<IModalProps> = ({ closeModal ,addUserToProject, projec
                     user: JSON.parse(window.localStorage.getItem("user") || "{}"),
                     projectName
                 }
-                AUTH_INTERCEPTOR.post("/project/get-all-users", payload).then(res => {
+                API_UTIL.post("/project/get-all-users", payload).then(res => {
                     setsuggestions(res.data);
                 })
 
@@ -71,7 +71,7 @@ const AddMembersModal: FC<IModalProps> = ({ closeModal ,addUserToProject, projec
                     <span className="flex-1">Add Collaborators</span>
                     <CloseOutlinedIcon onClick={closeModal} className="text-black self-end cursor-pointer" />
                 </div>
-                <Input id="addMembers" type="text" placeholder="Add Members" register={register} handleChange={getUserData} />
+                <Input id="addMembers" type="text" placeholder="Add Members" control={control} register={register} handleChange={getUserData} />
                 <AutoComplete addUser={addUser} suggestions={suggestions} extraCss="!mt-1 self-center w-4/5 !bg-white" />
             </div>
             <div className="flex items-center justify-between px-4 text-md font-base text-purple-700">

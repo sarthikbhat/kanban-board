@@ -48,13 +48,11 @@ export const getProjectByName = async (req: IRequest, res: Response) => {
         if (project) {
             const projectToObject: Project = project.toObject();
             const tasks: Task[] = await TaskSchema.find({ project: project?._id }).populate("assignedTo");
-            console.log(tasks);
             
 
             projectToObject.columns.forEach((column: Columns) => {
                 column.tasks = tasks.filter(task => task.column._id.toString() === column._id.toString());
             });
-            // console.log(projectToObject);
             
             res.json(projectToObject);
         }
@@ -135,7 +133,6 @@ export const geAllUsers = async (req: IRequest, res: Response) => {
         const findUsersBefore: User[] | null = await UserSchema.find({ _id: findProject.users });
         const notIncludedUserNames = findUsersBefore.map((e: User) => e.userName);
         const notIncludedFullNames = findUsersBefore.map((e: User) => e.fullName);
-        console.log(findUsersBefore);
         const findUsers = await UserSchema.find({
             $or: [
                 {

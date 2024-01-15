@@ -11,7 +11,6 @@ export const encPassword = async (
     password: string
 ): Promise<string> => {
     try {
-        console.log({ password, saltRounds });
 
         const hash = await bcrypt.hash(password, saltRounds);
         return hash;
@@ -43,7 +42,6 @@ export const verifyPassword = async (
 };
 
 export const createToken = (user: User) => {
-    console.log(user);
 
     return jwt.sign(user, process.env.TOKEN_KEY, {
         expiresIn: "30d",

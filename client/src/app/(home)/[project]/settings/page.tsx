@@ -1,11 +1,10 @@
 "use client"
 import { IProject } from "@/app/addproject/page";
 import Button from "@/components/Button";
-import Loading from "@/components/Loading";
-import AUTH_INTERCEPTOR from "@/services/ApiUtil";
+import API_UTIL from "@/services/ApiUtil";
+import SecurityIcon from '@mui/icons-material/Security';
 import { usePathname } from "next/navigation";
 import { FC, useEffect, useState } from "react";
-import SecurityIcon from '@mui/icons-material/Security';
 
 const ProjectSettings: FC = () => {
 
@@ -18,7 +17,7 @@ const ProjectSettings: FC = () => {
     }, [])
 
     const fetchDetailsByProject = () => {
-        AUTH_INTERCEPTOR.get("/project/get-project-by-name?projectName=" + decodeURI(pathName.split("/")[1].split("_")[0])).then(res => {
+        API_UTIL.get("/project/get-project-by-name?projectName=" + decodeURI(pathName.split("/")[1].split("_")[0])).then(res => {
             setproject(res.data)
             setloading(false);
         });
@@ -26,9 +25,7 @@ const ProjectSettings: FC = () => {
 
     return (
         <>
-            {!!loading ?
-                <Loading />
-                :
+            {
                 <section className="flex flex-col gap-8 p-4 px-6 w-full ">
 
                     <div className="text-2xl font-medium text-[#395886] flex flex-col gap-1">

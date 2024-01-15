@@ -13,7 +13,7 @@ const Navbar: FC = () => {
 
   const [user, setuser] = useState({} as IUser)
   const [openPopUp, setopenPopUp] = useState(false)
-  const { register } = useForm();
+  const { register,control } = useForm();
 
   const router = useRouter();
 
@@ -63,7 +63,7 @@ const Navbar: FC = () => {
       {/* <div className='text-md text-white'>
         Home/Projects
       </div> */}
-      <Input id={"search"} type={"text"} placeholder={"Search workitems"} displayLabel={false} register={register} extraCss="!p-1.5 !text-sm text-slate-500 !w-full !shadow-none" parentPosition="items-center !w-1/5" />
+      <Input control={control} id={"search"} type={"text"} placeholder={"Search workitems"} displayLabel={false} register={register} extraCss="!p-1.5 !text-sm text-slate-500 !w-full !shadow-none" parentPosition="items-center !w-1/5" />
       <NotificationsNoneTwoToneIcon htmlColor='white' className='text-white text-3xl'  />
       <div className='flex gap-2 items-center' onClick={() => setopenPopUp(true)}>
         <div className='flex flex-col'>

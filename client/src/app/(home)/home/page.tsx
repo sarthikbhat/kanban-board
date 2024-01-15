@@ -2,22 +2,21 @@
 import { IProject } from "@/app/addproject/page";
 import AddProjectButton from "@/components/AddProjectButton";
 import Input from "@/components/Input";
-import AUTH_INTERCEPTOR from "@/services/ApiUtil";
+import ProjectCard from "@/components/ProjectCard";
+import API_UTIL from "@/services/ApiUtil";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import SearchTwoToneIcon from "@mui/icons-material/SearchTwoTone";
 import { useRouter } from "next/navigation";
-import { FC, Suspense, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import '../styles.css';
-import Loading from "@/components/Loading";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ProjectCard from "@/components/ProjectCard";
 
 const Home: FC = () => {
 
   const {
     register,
-    watch
+    watch,
+    control
   } = useForm();
 
   const [projects, setprojects] = useState([] as IProject[])
@@ -31,7 +30,7 @@ const Home: FC = () => {
     let token = "";
     if (typeof window !== "undefined")
       token = window.localStorage.getItem("token") || ""
-    AUTH_INTERCEPTOR.get("/project/get-project").then(res => {
+    API_UTIL.get("/project/get-project").then(res => {
       setprojects([...res.data])
       setfilteredProjects([...res.data])
       setloading(false);
@@ -55,7 +54,6 @@ const Home: FC = () => {
   }
 
   const addToStarred = (project: IProject) => {
-    console.log(starredProjects);
     filteredProjects.filter(e => e._id === project._id)[0].starred = !project?.starred;
     if (project.starred)
       setstarredProjects([...starredProjects, project])
@@ -67,13 +65,12 @@ const Home: FC = () => {
 
   return (
     <>
-      {!!loading && <Loading />}
       <section className="mt-10 flex flex-col gap-6 relative">
         <img src="/assets/images/left.svg" alt="left-side-img-man-working" className="!fixed -left-10 bottom-0 w-[17%] hidden lg:block" />
         <img src="/assets/images/right.svg" alt="right-side-img-woman-working" className="!fixed right-0 -bottom-4 w-[15%] hidden lg:block" />
         <div className="bg-[#395886] w-full p-[3%] -z-[12] absolute -top-[9%]"></div>
         <div className="w-3/4 relative" style={{ margin: "auto" }}>
-          <Input type="text" placeholder="Search Projects" register={register} customChange={handleChange} id="search" extraCss="!p-3" />
+          <Input control={control} type="text" placeholder="Search Projects" register={register} customChange={handleChange} id="search" extraCss="!p-3" />
           <SearchTwoToneIcon
             className="absolute top-[40%] cursor-pointer"
             htmlColor="#9ca3b7"

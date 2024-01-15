@@ -1,8 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Head from "next/head";
-import AUTH_INTERCEPTOR from "@/services/ApiUtil";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [auth, setAuth] = useState(
@@ -21,7 +19,7 @@ export default function Home() {
   }, [auth, router]);
 
   useEffect(()=>{
-    // AUTH_INTERCEPTOR.get("../../config.json").then(res=>{
+    // API_UTIL.get("../../config.json").then(res=>{
     //   console.log(res);
       
     // })

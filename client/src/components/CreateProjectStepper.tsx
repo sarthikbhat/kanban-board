@@ -1,15 +1,12 @@
 "use client";
+import API_UTIL from "@/services/ApiUtil";
 import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
-import { FC, useState } from "react";
-import Button from "./Button";
-import Input from "./Input";
-import ProjectStepper from "./ProjectStepper";
-import AddUserStepper from "./AddUsersStepper";
 import { useRouter } from "next/navigation";
+import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import toast from "react-hot-toast";
-import AUTH_INTERCEPTOR from "@/services/ApiUtil";
+import AddUserStepper from "./AddUsersStepper";
+import Button from "./Button";
+import ProjectStepper from "./ProjectStepper";
 
 const DEFAULT_COLUMNS = ["To Do", "In Progress", "Completed"];
 
@@ -45,6 +42,7 @@ const CreateProjectStepper: FC<ProjectStepperProps> = ({ }) => {
     register,
     handleSubmit,
     setError,
+    control,
     formState: { errors },
   } = useForm();
 
@@ -53,7 +51,7 @@ const CreateProjectStepper: FC<ProjectStepperProps> = ({ }) => {
       let token = "";
       if (typeof window !== "undefined")
         token = window.localStorage.getItem("token") || ""
-      AUTH_INTERCEPTOR.post("/project/save-project", data, { headers: { "authorization": token } }).then(res => {
+      API_UTIL.post("/project/save-project", data, { headers: { "authorization": token } }).then(res => {
         setproject(res.data)
         setStep(step + 1)
         setstage("Add Users");
@@ -82,6 +80,7 @@ const CreateProjectStepper: FC<ProjectStepperProps> = ({ }) => {
           {
             1: (
               <ProjectStepper
+                control={control}
                 removeColumn={removeColumn}
                 handleChange={handleChange}
                 columns={columns}
