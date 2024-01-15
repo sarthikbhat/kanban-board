@@ -17,12 +17,16 @@ function AUTHINTERCEPTOR({ children }: any) {
 
   const router = useRouter();
 
-  const isScreenMounted = useRef(true)
-  useEffect(() => {
-    return () => { isScreenMounted.current = false }
-  }, [])
+  // const isScreenMounted = useRef(true)
+  // useEffect(() => {
+  //   return () => { isScreenMounted.current = false }
+  // }, [])
+
+
+  // API_UTIL.interceptors.
 
   API_UTIL.interceptors.request.use((config) => {
+    setIsLoading(true);
     if (!config.url?.includes("/auth/") && (typeof window !== "undefined")) {
       config.headers.Authorization = window.localStorage.getItem("token")
     }
@@ -30,10 +34,12 @@ function AUTHINTERCEPTOR({ children }: any) {
   })
 
   API_UTIL.interceptors.response.use((response) => {
-    isScreenMounted && setIsLoading(false)
+    // console.log(isScreenMounted);
+    
+     setIsLoading(false)
     return response
   }, (error: AxiosError) => {
-    isScreenMounted && setIsLoading(false)
+     setIsLoading(false)
     if (error.response?.status === 401 || error.response?.data === "jwt expired") {
       router.push("/login");
       toast.error(error.response?.data as string)

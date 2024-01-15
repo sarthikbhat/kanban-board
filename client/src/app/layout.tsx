@@ -3,7 +3,7 @@ import Loading from "@/components/Loading";
 import { AUTHINTERCEPTOR, LoadingContext } from "@/services/ApiUtil";
 import { Inter } from "next/font/google";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { AnimatePresence } from 'framer-motion'
@@ -42,6 +42,11 @@ export default function RootLayout({
 
   const [isLoading, setIsLoading] = useState(true)
 
+  const isScreenMounted = useRef(false)
+  useEffect(() => {
+    isScreenMounted.current = true 
+  }, [])
+
   const pathName = usePathname()
   const [path, setPath] = useState("");
 
@@ -50,8 +55,8 @@ export default function RootLayout({
   }, [pathName])
 
   useEffect(() => {
-    console.log(isLoading);
-  }, [isLoading])
+    setIsLoading(!isScreenMounted.current)
+  }, [isLoading, isScreenMounted])
 
 
 
@@ -62,21 +67,21 @@ export default function RootLayout({
         <link rel="icon" type="img/png" href="/favicon.png" />
       </head>
       <body style={{ minHeight: "100vh" }} className={inter.className}>
-      <AnimatePresence mode="wait" initial={false}>
+        <AnimatePresence mode="wait" initial={false}>
 
-        <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
-          <AUTHINTERCEPTOR>
-            <Toaster
-              position="bottom-right"
-              toastOptions={toastOptions}
-              reverseOrder={false}
-            />
-            {
-              isLoading && <Loading />
-            }
-            {children}
-          </AUTHINTERCEPTOR>
-        </LoadingContext.Provider>
+          <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
+            <AUTHINTERCEPTOR>
+              <Toaster
+                position="bottom-right"
+                toastOptions={toastOptions}
+                reverseOrder={false}
+              />
+              {
+                isLoading && <Loading />
+              }
+              {children}
+            </AUTHINTERCEPTOR>
+          </LoadingContext.Provider>
         </AnimatePresence>
       </body>
     </html>
