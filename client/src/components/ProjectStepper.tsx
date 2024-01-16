@@ -32,7 +32,6 @@ const ProjectStepper: FC<ProjectStepperProps> = ({
         parentPosition="items-start"
         label="Project Name"
         extraCss="!w-3/5"
-        handleChange={() => { }}
         id="projectName"
         register={register}
         control={control}
@@ -43,7 +42,6 @@ const ProjectStepper: FC<ProjectStepperProps> = ({
         parentPosition="items-start"
         label="Project Description"
         extraCss="!w-3/5"
-        handleChange={() => { }}
         id="projectDescription"
         register={register}
         control={control}

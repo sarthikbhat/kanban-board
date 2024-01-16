@@ -7,7 +7,7 @@ import API_UTIL from "@/services/ApiUtil";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import SearchTwoToneIcon from "@mui/icons-material/SearchTwoTone";
 import { useRouter } from "next/navigation";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import '../styles.css';
 
@@ -26,16 +26,34 @@ const Home: FC = () => {
 
   const router = useRouter();
 
-  useEffect(() => {
-    let token = "";
-    if (typeof window !== "undefined")
-      token = window.localStorage.getItem("token") || ""
-    API_UTIL.get("/project/get-project").then(res => {
+  const fetchData = useCallback(async () => {
+    // This API call will only be made once.
+    // let token = "";
+    // if (typeof window !== "undefined")
+    //   token = window.localStorage.getItem("token") || ""
+    const res = await API_UTIL.get("/project/get-project")
+    // .then(res => {
+      if (res) {
+      console.log("called");
       setprojects([...res.data])
       setfilteredProjects([...res.data])
       setloading(false);
-    })
-  }, [])
+    }
+    // })
+  }, []);
+
+  useEffect(() => {
+
+    fetchData();
+    // let token = "";
+    // if (typeof window !== "undefined")
+    //   token = window.localStorage.getItem("token") || ""
+    // API_UTIL.get("/project/get-project").then(res => {
+    //   setprojects([...res.data])
+    //   setfilteredProjects([...res.data])
+    //   setloading(false);
+    // })
+  }, [fetchData])
 
 
   const handleChange = (val: string) => {

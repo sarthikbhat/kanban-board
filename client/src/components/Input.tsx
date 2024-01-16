@@ -1,6 +1,6 @@
 "use client";
 import { FC, HTMLInputTypeAttribute } from "react";
-import { Control, Controller, RegisterOptions, UseFormRegister } from "react-hook-form";
+import { Control, Controller, ControllerRenderProps, RegisterOptions, UseFormRegister } from "react-hook-form";
 
 interface InputProps {
   id: string;
@@ -18,6 +18,7 @@ interface InputProps {
   error?: any;
   validations?: RegisterOptions<any>
   value?: any;
+  handleChangeBoolean?: boolean;
 }
 
 const Input: FC<InputProps> = ({
@@ -35,20 +36,22 @@ const Input: FC<InputProps> = ({
   validations,
   error,
   value = "",
-  control
+  control,
+  handleChangeBoolean = false
 }) => {
 
   // useEffect(()=>{
   //   register({ name: id} });
   // },[])
 
-  const handleChangeChild = (e: any, id: string) => {
+  const handleChangeChild = (e: any, id: string, field: (...event: any[]) => void) => {
     if (id === "columns") return;
     if (customChange) {
       customChange(e.target.value)
     }
     else {
-
+      console.log("ddfdf");
+      field(e)
       handleChange && handleChange(e.target.value, id);
     }
   };
@@ -77,7 +80,7 @@ const Input: FC<InputProps> = ({
               id={id}
               cols={30}
               rows={5}
-              onChange={field.onChange}
+              onChange={(e) => handleChangeBoolean ? handleChangeChild(e, id ? id : "", field.onChange) : field.onChange(e)}
               value={field.value || ""}
               className={
                 "w-4/5 border rounded-md p-4 focus:outline-none shadow-sm shadow-[#B1C9EF] hover:shadow-md hover:shadow-[#D5DEEF] resize-none " +
@@ -95,7 +98,7 @@ const Input: FC<InputProps> = ({
               }
               type={type}
               // {...register({name:id},validations)}
-              onChange={(e) => handleChange ? handleChangeChild(e, id ? id : "") : field.onChange(e)}
+              onChange={(e) => handleChangeBoolean ? handleChangeChild(e, id ? id : "", field.onChange) : field.onChange(e)}
               onKeyDown={(e: any) => {
                 id === "columns"
                   ? e.key === "Enter"

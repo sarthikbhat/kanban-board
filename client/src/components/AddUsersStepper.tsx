@@ -32,7 +32,7 @@ const AddUserStepper: FC<AddUserStepperProps> = ({ addUserToProject, project }) 
   };
 
   const addUser = (user: any) => {
-    const payload = { ...project, users: [...project.users, user] }
+    const payload = { ...{ projectName: project.projectName }, users: [...users, user] }
     API_UTIL.post("/project/save-project-users", payload).then(res => {
       setusers([...users, user])
       addUserToProject(res.data);
@@ -49,7 +49,8 @@ const AddUserStepper: FC<AddUserStepperProps> = ({ addUserToProject, project }) 
       if (value.length >= 3) {
         let payload = {
           search: value,
-          user: JSON.parse(window.localStorage.getItem("user") || "{}")
+          user: JSON.parse(window.localStorage.getItem("user") || "{}"),
+          projectName: project.projectName
         }
         API_UTIL.post("/project/get-all-users", payload).then(res => {
           setsuggestions(res.data);
@@ -77,6 +78,7 @@ const AddUserStepper: FC<AddUserStepperProps> = ({ addUserToProject, project }) 
         parentPosition="items-start"
         label="Add Users"
         extraCss="!w-3/5"
+        handleChangeBoolean={true}
         handleChange={getUserData}
         id="users"
         control={control}
@@ -92,7 +94,7 @@ const AddUserStepper: FC<AddUserStepperProps> = ({ addUserToProject, project }) 
               className=" group px-4 py-2 flex gap-4 items-center"
             >
               <div className="rounded-full p-2 text-sm border border-slate-400 shadow-lg text-slate-700">
-                {e.fullName.split(" ").map((e) => e.charAt(0)).splice(0,2)}
+                {e.fullName.split(" ").map((e) => e.charAt(0)).splice(0, 2)}
               </div>
               <div className="flex flex-col w-[50%]">
                 <span className="text-sm">{e.fullName}</span>

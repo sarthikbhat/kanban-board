@@ -47,6 +47,8 @@ const CreateProjectStepper: FC<ProjectStepperProps> = ({ }) => {
   } = useForm();
 
   const onsubmit = (data: any) => {
+    console.log(data);
+
     if (step == 1) {
       let token = "";
       if (typeof window !== "undefined")
