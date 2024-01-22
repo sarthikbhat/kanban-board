@@ -1,4 +1,3 @@
-import { IUser } from '@/app/addproject/page';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
