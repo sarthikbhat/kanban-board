@@ -1,6 +1,6 @@
 'use client';
-import { IProject } from '@/app/addproject/page';
 import Button from '@/components/Button';
+import { IProject } from '@/interfaces/Project';
 import API_UTIL from '@/services/ApiUtil';
 import SecurityIcon from '@mui/icons-material/Security';
 import { usePathname } from 'next/navigation';
