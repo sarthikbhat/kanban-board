@@ -27,8 +27,6 @@ function AUTHINTERCEPTOR({ children }: any) {
 
   API_UTIL.interceptors.response.use(
     (response) => {
-      // console.log(isScreenMounted);
-
       setIsLoading(false);
       return response;
     },
@@ -36,8 +34,8 @@ function AUTHINTERCEPTOR({ children }: any) {
       setIsLoading(false);
       if (error.response?.status === 401 || error.response?.data === 'jwt expired') {
         router.push('/login');
-        toast.error(error.response?.data as string);
-      } else toast.error(error.response?.data as string);
+        toast.error(error.response?.data as string,{id:"error"});
+      } else toast.error(error.response?.data as string,{id:"error"});
       return Promise.reject(error);
     }
   );

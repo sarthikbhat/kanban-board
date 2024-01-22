@@ -12,8 +12,10 @@ export const useApi = (url: string, options: AxiosRequestConfig, callOnInit: boo
   const isDataFetched = useRef(false);
 
   const callApi = async () => {
-    const res: AxiosResponse = await API_UTIL(url, options);
-    setResponse(res);
+    try {
+      const res: AxiosResponse = await API_UTIL(url, options);
+      setResponse(res);
+    } catch (error) {}
   };
 
   useEffect(() => {

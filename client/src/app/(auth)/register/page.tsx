@@ -18,7 +18,6 @@ export interface IForm {
 
 const Login: FC = ({}) => {
   const {
-    register,
     handleSubmit,
     setError,
     reset,
@@ -72,7 +71,6 @@ const Login: FC = ({}) => {
           placeholder="John Doe"
           extraCss="!w-full !p-2 !text-xs"
           parentPosition="!items-start text-sm"
-          register={register}
           error={errors}
           control={control}
         />
@@ -83,7 +81,6 @@ const Login: FC = ({}) => {
           placeholder="JohnDoe29"
           extraCss="!w-full !p-2 !text-xs"
           parentPosition="!items-start text-sm"
-          register={register}
           error={errors}
           control={control}
         />
@@ -94,7 +91,6 @@ const Login: FC = ({}) => {
           placeholder="john.doe@email.com"
           extraCss="!w-full !p-2 !text-xs"
           parentPosition="!items-start text-sm"
-          register={register}
           error={errors}
           control={control}
         />
@@ -105,7 +101,6 @@ const Login: FC = ({}) => {
           placeholder="***********"
           extraCss="!w-full !p-2 !text-xs"
           parentPosition="!items-start text-sm"
-          register={register}
           error={errors}
           control={control}
         />
@@ -116,7 +111,6 @@ const Login: FC = ({}) => {
           placeholder="***********"
           extraCss="!w-full !p-2 !text-xs"
           parentPosition="!items-start text-sm"
-          register={register}
           error={errors}
           control={control}
         />

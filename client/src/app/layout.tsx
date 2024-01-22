@@ -62,7 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AnimatePresence mode="wait" initial={false}>
           <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
             <AUTHINTERCEPTOR>
-              <Toaster position="bottom-right" toastOptions={toastOptions} reverseOrder={false} />
+              <Toaster position="bottom-right" toastOptions={toastOptions} reverseOrder={false} key="toast"/>
               {isLoading && <Loading />}
               {children}
             </AUTHINTERCEPTOR>
