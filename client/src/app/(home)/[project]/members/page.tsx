@@ -1,7 +1,7 @@
 'use client';
-import { IUser } from '@/app/addproject/page';
 import AddMembersModal from '@/components/AddMemberModal';
 import Input from '@/components/Input';
+import { IUser } from '@/interfaces/User';
 import API_UTIL from '@/services/ApiUtil';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
@@ -18,7 +18,7 @@ const ITEMS_PER_PAGE = 8;
 const INITIAL_OFFSET = 0;
 
 const Members: FC = () => {
-  const { register, control } = useForm();
+  const { control } = useForm();
   const pathName = usePathname();
 
   const [users, setUsers] = useState([] as IUser[]);
@@ -26,13 +26,11 @@ const Members: FC = () => {
   const [filteredUsers, setfilteredUsers] = useState([] as IUser[]);
   const [currentPage, setcurrentPage] = useState(1);
   const [addMembersOpen, setaddMembersOpen] = useState(false);
-  const [loading, setloading] = useState(true);
   const [currentUser, setcurrentUser] = useState({} as IUser);
 
   useEffect(() => {
     API_UTIL.get('/project/get-project-users?projectName=' + decodeURI(pathName.split('/')[1].split('_')[0])).then((res) => {
       setUsers([...res.data]);
-      setloading(false);
       setcurrentUser(JSON.parse(window.localStorage.getItem('user') || '{}'));
     });
   }, []);
@@ -107,7 +105,6 @@ const Members: FC = () => {
           id="searchMembers"
           type="text"
           placeholder="Search Members"
-          register={register}
           parentPosition="flex-start"
           extraCss="!text-slate-700 !w-1/3 !p-2 !text-sm"
         />

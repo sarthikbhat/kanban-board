@@ -28,7 +28,7 @@ const CreateProjectStepper: FC = ({}) => {
   };
   const router = useRouter();
 
-  const { register, handleSubmit, control } = useForm();
+  const { handleSubmit, control } = useForm();
 
   const onsubmit = (data: any) => {
     if (step == 1) {
@@ -65,7 +65,6 @@ const CreateProjectStepper: FC = ({}) => {
                 handleChange={handleChange}
                 columns={columns}
                 defaultColumns={DEFAULT_COLUMNS}
-                register={register}
               />
             ),
             2: <AddUserStepper project={project} addUserToProject={addUserToProject} />

@@ -12,7 +12,7 @@ import { useForm } from 'react-hook-form';
 import '../styles.css';
 
 const Home: FC = () => {
-  const { register, control } = useForm();
+  const { control } = useForm();
 
   const [projects, setprojects] = useState([] as IProject[]);
   const [filteredProjects, setfilteredProjects] = useState([] as IProject[]);
@@ -70,7 +70,6 @@ const Home: FC = () => {
             control={control}
             type="text"
             placeholder="Search Projects"
-            register={register}
             customChange={handleChange}
             id="search"
             extraCss="!p-3"

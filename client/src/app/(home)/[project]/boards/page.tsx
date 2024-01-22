@@ -20,7 +20,7 @@ const priorityToColor: Record<string, string> = {
 };
 
 const Boards: FC = () => {
-  const { register, control } = useForm();
+  const { control } = useForm();
 
   const router = useRouter();
   const pathName = usePathname();
@@ -174,7 +174,6 @@ const Boards: FC = () => {
                         id={'searchColumn'}
                         type={'text'}
                         placeholder={'Search workitems'}
-                        register={register}
                         extraCss="!py-[0.3rem] !w-full !text-xs text-slate-500"
                         parentPosition="items-center !w-[100%]"
                       />
