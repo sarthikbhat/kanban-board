@@ -10,7 +10,7 @@ import { FC, useEffect, useState } from 'react';
 const ProjectSettings: FC = () => {
   const [project, setproject] = useState({} as IProject);
   const pathName = usePathname();
-  const { response } = useApi(
+  const [ response ] = useApi(
     '/project/get-project-by-name?projectName=' + decodeURI(pathName.split('/')[1].split('_')[0]),
     { method: 'GET' }
   );

@@ -15,6 +15,7 @@ import SkipPreviousOutlinedIcon from '@mui/icons-material/SkipPreviousOutlined';
 import { usePathname } from 'next/navigation';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+
 const ITEMS_PER_PAGE = 8;
 const INITIAL_OFFSET = 0;
 
@@ -26,17 +27,17 @@ const Members: FC = () => {
   const [currentPage, setcurrentPage] = useState(1);
   const [addMembersOpen, setaddMembersOpen] = useState(false);
   const [currentUser, setcurrentUser] = useState({} as IUser);
-  const { response } = useApi(
+  const [projectResponse] = useApi(
     '/project/get-project-by-name?projectName=' + decodeURI(pathName.split('/')[1].split('_')[0]),
     { method: 'GET' }
   );
 
   useEffect(() => {
-    if (response) {
-      setUsers([...response.data]);
+    if (projectResponse) {
+      setUsers([...projectResponse.data]);
       setcurrentUser(JSON.parse(window.localStorage.getItem('user') || '{}'));
     }
-  }, [response]);
+  }, [projectResponse]);
 
   useEffect(() => {
     setfilteredUsers([...users?.slice(INITIAL_OFFSET, ITEMS_PER_PAGE)]);
@@ -59,7 +60,7 @@ const Members: FC = () => {
     setaddMembersOpen(false);
   };
 
-  const addUserToProject = (user: IUser) => {
+  const addUserToProject = async (user: IUser) => {
     const payload = { ...{ projectName: decodeURI(pathName.split('/')[1].split('_')[0]) }, users: [...users, user] };
     API_UTIL.post('/project/save-project-users', payload).then((res) => {
       setUsers(res.data.users);

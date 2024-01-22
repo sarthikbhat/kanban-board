@@ -17,7 +17,7 @@ const Home: FC = () => {
   const [projects, setprojects] = useState([] as IProject[]);
   const [filteredProjects, setfilteredProjects] = useState([] as IProject[]);
   const [starredProjects, setstarredProjects] = useState([] as IProject[]);
-  const { response } = useApi('/project/get-project', { method: 'GET' });
+  const [ response ] = useApi('/project/get-project', { method: 'GET' });
   const router = useRouter();
 
   useEffect(() => {

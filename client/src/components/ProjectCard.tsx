@@ -1,8 +1,8 @@
 'use client';
 import { FC, MouseEvent } from 'react';
 import StarIcon from '@mui/icons-material/Star';
-import { IProject } from '@/app/addproject/page';
 import { useRouter } from 'next/navigation';
+import { IProject } from '@/interfaces/Project';
 
 interface InputProps {
   project: IProject;

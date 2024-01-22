@@ -31,7 +31,7 @@ const Boards: FC = () => {
   const [columnId, setcolumnId] = useState('');
   const [dragStart, setdragStart] = useState('');
   const [task, settask] = useState({} as ITask);
-  const { response, callApi } = useApi(
+  const [response, callApis] = useApi(
     '/project/get-project-by-name?projectName=' + decodeURI(pathName.split('/')[1].split('_')[0]),
     { method: 'GET' }
   );
@@ -45,7 +45,7 @@ const Boards: FC = () => {
     settask({} as ITask);
     setTaskModal(false);
     if (refresh) {
-      callApi();
+      callApis();
     }
   };
 

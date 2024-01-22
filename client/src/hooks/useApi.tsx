@@ -7,13 +7,13 @@ interface IApi {
   callApi: () => void;
 }
 
-export const useApi = (url: string, options: AxiosRequestConfig, callOnInit: boolean = true): IApi => {
+export const useApi = (url: string, options: AxiosRequestConfig, callOnInit: boolean = true) => {
   const [response, setResponse] = useState<AxiosResponse>();
   const isDataFetched = useRef(false);
 
-  const callApi = async () => {
+  const callApi = async (urlOverride?: string, optionsOverride?: AxiosRequestConfig) => {
     try {
-      const res: AxiosResponse = await API_UTIL(url, options);
+      const res: AxiosResponse = await API_UTIL(urlOverride || url, optionsOverride || options);
       setResponse(res);
     } catch (error) {}
   };
@@ -26,5 +26,5 @@ export const useApi = (url: string, options: AxiosRequestConfig, callOnInit: boo
     }
   }, []);
 
-  return { response, callApi };
+  return [response, callApi] as const;
 };
