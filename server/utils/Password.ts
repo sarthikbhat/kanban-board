@@ -44,6 +44,6 @@ export const verifyPassword = async (
 export const createToken = (user: User) => {
 
     return jwt.sign(user, process.env.TOKEN_KEY, {
-        expiresIn: "30d",
+        expiresIn: "30m",
     });
 };
