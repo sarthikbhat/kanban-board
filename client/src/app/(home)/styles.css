@@ -8,13 +8,15 @@
   width: 10%;
 }
 
-.tasks-outer::-webkit-scrollbar, .members-outer::-webkit-scrollbar{
+.tasks-outer::-webkit-scrollbar,
+.members-outer::-webkit-scrollbar {
   display: none;
 }
 
-.tasks-outer, .members-outer {
-  -ms-overflow-style: none; 
-  scrollbar-width: none; 
+.tasks-outer,
+.members-outer {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .outer::-webkit-scrollbar {
@@ -39,6 +41,6 @@
   background: #b90a0a !important;
 }
 
-.outer::-webkit-scrollbar-corner{
+.outer::-webkit-scrollbar-corner {
   background-color: transparent;
 }

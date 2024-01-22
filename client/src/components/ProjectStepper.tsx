@@ -1,9 +1,9 @@
-"use client";
-import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
-import { FC, useState } from "react";
-import Button from "./Button";
-import Input from "./Input";
-import { Control, UseFormRegister, useForm } from "react-hook-form";
+'use client';
+import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
+import { FC, useState } from 'react';
+import Button from './Button';
+import Input from './Input';
+import { Control, UseFormRegister, useForm } from 'react-hook-form';
 
 interface ProjectStepperProps {
   removeColumn: (value: string) => void;
@@ -11,7 +11,7 @@ interface ProjectStepperProps {
   columns: string[];
   defaultColumns: string[];
   register: UseFormRegister<any>;
-  control:Control<any>
+  control: Control<any>;
 }
 
 const ProjectStepper: FC<ProjectStepperProps> = ({
@@ -22,8 +22,6 @@ const ProjectStepper: FC<ProjectStepperProps> = ({
   register,
   control
 }) => {
-
-
   return (
     <>
       <Input
