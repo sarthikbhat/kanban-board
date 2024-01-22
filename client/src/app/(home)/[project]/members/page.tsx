@@ -1,6 +1,7 @@
 'use client';
 import AddMembersModal from '@/components/AddMemberModal';
 import Input from '@/components/Input';
+import { useApi } from '@/hooks/useApi';
 import { IUser } from '@/interfaces/User';
 import API_UTIL from '@/services/ApiUtil';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
@@ -20,20 +21,22 @@ const INITIAL_OFFSET = 0;
 const Members: FC = () => {
   const { control } = useForm();
   const pathName = usePathname();
-
   const [users, setUsers] = useState([] as IUser[]);
-
   const [filteredUsers, setfilteredUsers] = useState([] as IUser[]);
   const [currentPage, setcurrentPage] = useState(1);
   const [addMembersOpen, setaddMembersOpen] = useState(false);
   const [currentUser, setcurrentUser] = useState({} as IUser);
+  const { response } = useApi(
+    '/project/get-project-by-name?projectName=' + decodeURI(pathName.split('/')[1].split('_')[0]),
+    { method: 'GET' }
+  );
 
   useEffect(() => {
-    API_UTIL.get('/project/get-project-users?projectName=' + decodeURI(pathName.split('/')[1].split('_')[0])).then((res) => {
-      setUsers([...res.data]);
+    if (response) {
+      setUsers([...response.data]);
       setcurrentUser(JSON.parse(window.localStorage.getItem('user') || '{}'));
-    });
-  }, []);
+    }
+  }, [response]);
 
   useEffect(() => {
     setfilteredUsers([...users?.slice(INITIAL_OFFSET, ITEMS_PER_PAGE)]);

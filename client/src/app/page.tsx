@@ -14,12 +14,5 @@ export default function Home() {
     }
   }, [auth, router]);
 
-  useEffect(() => {
-    // API_UTIL.get("../../config.json").then(res=>{
-    //   console.log(res);
-    // })
-  }),
-    [];
-
   return <></>;
 }

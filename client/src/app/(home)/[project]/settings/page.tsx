@@ -1,5 +1,6 @@
 'use client';
 import Button from '@/components/Button';
+import { useApi } from '@/hooks/useApi';
 import { IProject } from '@/interfaces/Project';
 import API_UTIL from '@/services/ApiUtil';
 import SecurityIcon from '@mui/icons-material/Security';
@@ -8,21 +9,15 @@ import { FC, useEffect, useState } from 'react';
 
 const ProjectSettings: FC = () => {
   const [project, setproject] = useState({} as IProject);
-  const [loading, setloading] = useState(true);
   const pathName = usePathname();
+  const { response } = useApi(
+    '/project/get-project-by-name?projectName=' + decodeURI(pathName.split('/')[1].split('_')[0]),
+    { method: 'GET' }
+  );
 
   useEffect(() => {
-    fetchDetailsByProject();
-  }, []);
-
-  const fetchDetailsByProject = () => {
-    API_UTIL.get('/project/get-project-by-name?projectName=' + decodeURI(pathName.split('/')[1].split('_')[0])).then(
-      (res) => {
-        setproject(res.data);
-        setloading(false);
-      }
-    );
-  };
+    if (response) setproject(response.data);
+  }, [response]);
 
   return (
     <>

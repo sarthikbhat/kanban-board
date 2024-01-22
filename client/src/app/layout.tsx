@@ -1,14 +1,10 @@
 'use client';
 import Loading from '@/components/Loading';
 import { AUTHINTERCEPTOR, LoadingContext } from '@/services/ApiUtil';
-import { Inter } from 'next/font/google';
-import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-import './globals.css';
 import { AnimatePresence } from 'framer-motion';
-
-const inter = Inter({ subsets: ['latin'] });
+import './globals.css';
 
 const toastOptions = {
   error: {
@@ -35,18 +31,11 @@ const toastOptions = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
-
   const isScreenMounted = useRef(false);
+
   useEffect(() => {
     isScreenMounted.current = true;
   }, []);
-
-  const pathName = usePathname();
-  const [path, setPath] = useState('');
-
-  useEffect(() => {
-    setPath(pathName.split('/').pop() || '');
-  }, [pathName]);
 
   useEffect(() => {
     setIsLoading(!isScreenMounted.current);
@@ -58,11 +47,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <title>Kanban Board </title>
         <link rel="icon" type="img/png" href="/favicon.png" />
       </head>
-      <body style={{ minHeight: '100vh' }} className={inter.className}>
+      <body style={{ minHeight: '100vh' }}>
         <AnimatePresence mode="wait" initial={false}>
           <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
             <AUTHINTERCEPTOR>
-              <Toaster position="bottom-right" toastOptions={toastOptions} reverseOrder={false} key="toast"/>
+              <Toaster position="bottom-right" toastOptions={toastOptions} reverseOrder={false} key="toast" />
               {isLoading && <Loading />}
               {children}
             </AUTHINTERCEPTOR>

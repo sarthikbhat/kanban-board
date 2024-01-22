@@ -1,6 +1,7 @@
 'use client';
 import Input from '@/components/Input';
 import TaskModal from '@/components/TaskModal';
+import { useApi } from '@/hooks/useApi';
 import { IColumns, IProject, ITask } from '@/interfaces/Project';
 import API_UTIL from '@/services/ApiUtil';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
@@ -30,6 +31,10 @@ const Boards: FC = () => {
   const [columnId, setcolumnId] = useState('');
   const [dragStart, setdragStart] = useState('');
   const [task, settask] = useState({} as ITask);
+  const { response, callApi } = useApi(
+    '/project/get-project-by-name?projectName=' + decodeURI(pathName.split('/')[1].split('_')[0]),
+    { method: 'GET' }
+  );
 
   const openModal = (columnId: string, task: ITask | undefined = undefined) => {
     if (task) settask(task);
@@ -40,21 +45,13 @@ const Boards: FC = () => {
     settask({} as ITask);
     setTaskModal(false);
     if (refresh) {
-      fetchDetailsByProject();
+      callApi();
     }
   };
 
   useEffect(() => {
-    fetchDetailsByProject();
-  }, []);
-
-  const fetchDetailsByProject = () => {
-    API_UTIL.get('/project/get-project-by-name?projectName=' + decodeURI(pathName.split('/')[1].split('_')[0])).then(
-      (res) => {
-        setproject(res.data);
-      }
-    );
-  };
+    if (response) setproject(response.data);
+  }, [response]);
 
   const allTasks = () => {
     let sum = 0;
@@ -72,13 +69,7 @@ const Boards: FC = () => {
     e.preventDefault();
   };
 
-  const dragLeave = (e: DragEvent) => {
-    // e.currentTarget.children.item(3)?.classList.add("hide")
-    // e.preventDefault()
-  };
-
   const dragStartEvent = (e: DragEvent, id: string | undefined, column: string | undefined) => {
-    // e.currentTarget.classList.add("hide");
     column && setdragStart(column);
     id && e.dataTransfer.setData('text/plain', id);
   };
@@ -151,7 +142,6 @@ const Boards: FC = () => {
                 <section
                   id="outer-column-section"
                   onDrop={(e) => dropEvent(e, column._id)}
-                  onDragLeaveCapture={(e) => dragLeave(e)}
                   onDragOver={(e) => dragOverEvent(e)}
                   key={index}
                   style={{ borderColor: '#B1C9EF' + '99', background: '#B1C9EF0D' }}

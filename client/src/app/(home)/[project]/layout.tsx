@@ -1,7 +1,7 @@
 'use client';
 import SideMenu from '@/components/SideMenu';
-import '../styles.css';
 import { AnimatePresence } from 'framer-motion';
+import '../styles.css';
 
 interface ILayout {
   children: React.ReactNode;
