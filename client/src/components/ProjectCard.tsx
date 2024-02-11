@@ -19,14 +19,15 @@ const ProjectCard: FC<InputProps> = ({ project, addToStarred }) => {
   return (
     <div
       onClick={() => router.push(`/${project.projectName + '_' + project._id}/boards`)}
-      className="flex flex-col border shadow w-[19%] max-[10%] cursor-pointer rounded bg-[#D5DEEF] text-[#395886] font-medium tracking-wider"
+      className="flex flex-col border shadow w-[19%] max-h-[20vh] cursor-pointer rounded bg-[#D5DEEF] text-[#395886] font-medium tracking-wider"
     >
       <div className="p-4 py-3 gap-2 flex flex-col h-[100%]">
         <div className="text-xl font-medium tracking-wider">{project && project?.projectName}</div>
+        {/* <div className="text-xl font-medium tracking-wider">{project && project?.projectName.substring(0, 1) + (project?.projectName.length > 1 ? '...' : '')}</div> */}
         <div className="flex justify-between items-end h-[100%]">
           <div className="text-sm font-normal tracking-wider">
             {project &&
-              project?.projectDescription.substring(0, 26) + (project?.projectDescription.length > 26 ? '...' : '')}
+              project?.projectDescription.substring(0, 15) + (project?.projectDescription.length > 15 ? '...' : '')}
           </div>
           <StarIcon
             onClick={(event) => {

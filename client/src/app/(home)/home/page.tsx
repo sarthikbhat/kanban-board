@@ -17,11 +17,14 @@ const Home: FC = () => {
   const [projects, setprojects] = useState([] as IProject[]);
   const [filteredProjects, setfilteredProjects] = useState([] as IProject[]);
   const [starredProjects, setstarredProjects] = useState([] as IProject[]);
-  const [ response ] = useApi('/project/get-project', { method: 'GET' });
+  const [response] = useApi('/project/get-project', { method: 'GET' });
   const router = useRouter();
 
   useEffect(() => {
     if (response) {
+      const data = (response?.data as IProject[]).sort((a, b) => {
+        return new Date(b?.updatedAt || '').getTime() - new Date(a?.updatedAt || '').getTime();
+      });
       setprojects([...response?.data]);
       setfilteredProjects([...response?.data]);
     }
@@ -53,7 +56,7 @@ const Home: FC = () => {
 
   return (
     <>
-      <section className="mt-10 flex flex-col gap-6 relative">
+      <section className="mt-10 flex flex-col gap-5 relative">
         <img
           src="/assets/images/left.svg"
           alt="left-side-img-man-working"
@@ -84,7 +87,7 @@ const Home: FC = () => {
           <div className="w-2/4 bg-[#395886]/30 h-[0.1px] ml-[20%] -mt-2"></div>
           {starredProjects.length ? (
             <div className="flex w-3/5 gap-5 flex-wrap p-4 rounded ml-[19%] text-[#395886] font-medium tracking-wider -mt-2">
-              {starredProjects.map((project, index) => {
+              {starredProjects.slice(0, 4).map((project, index) => {
                 return <ProjectCard key={index} project={project} addToStarred={addToStarred} />;
               })}
               {starredProjects.length > 4 && (
@@ -106,8 +109,8 @@ const Home: FC = () => {
           <div className="w-2/4 flex justify-center text-2xl text-[#395886]">My Projects</div>
           <div className="w-2/4 bg-[#395886]/30 h-[0.1px] ml-[20%] -mt-2"></div>
           {!!filteredProjects.length ? (
-            <div className="flex w-3/5 gap-5 flex-wrap p-4 rounded ml-[19%] -mt-2">
-              {filteredProjects.map((project, index) => {
+            <div className="flex w-[65%] gap-5 flex-wrap p-4 rounded ml-[19%] -mt-2">
+              {filteredProjects.slice(0, 4).map((project, index) => {
                 return <ProjectCard key={index} project={project} addToStarred={addToStarred} />;
               })}
               {filteredProjects.length > 4 && (

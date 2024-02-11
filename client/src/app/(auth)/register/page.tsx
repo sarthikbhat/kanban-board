@@ -61,9 +61,9 @@ const Login: FC = ({}) => {
   }, [apiCalled, reset]);
 
   return (
-    <section className="p-10 flex flex-col justify-between h-full w-full">
+    <section className="p-10 flex flex-col gap-8 h-full w-full">
       <h1 className="text-xl tracking-wide text-left font-semibold">Sign Up</h1>
-      <form className="flex flex-col gap-8 items-center" onSubmit={handleSubmit(onSubmit)}>
+      <form className="flex flex-col gap-4 items-center" onSubmit={handleSubmit(onSubmit)}>
         <Input
           id="fullName"
           label="Full Name"

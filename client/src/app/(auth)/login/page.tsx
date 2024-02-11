@@ -31,7 +31,7 @@ const Login: FC = ({}) => {
   };
 
   return (
-    <section className="p-10 flex flex-col justify-between h-full w-full">
+    <section className="p-10 flex flex-col justify-center gap-8 h-full w-full">
       <h1 className="text-xl tracking-wide text-left font-semibold">Log In</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-10 items-center">
         <Input

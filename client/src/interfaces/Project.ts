@@ -8,6 +8,7 @@ export interface IProject {
   tasks: any[];
   starred?: boolean;
   _id: string;
+  updatedAt?: string;
 }
 
 export interface IColumns {
