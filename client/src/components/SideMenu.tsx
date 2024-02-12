@@ -24,7 +24,7 @@ const SideMenu: FC = ({}) => {
 
   useEffect(() => {
     setactiveRoute(pathName.split('/').slice(-1)[0]);
-    setprojectName(decodeURI(pathName.split('/')[1].split('_')[0]));
+    setprojectName(decodeURI(pathName.split('/')[1].split('__')[0]));
   }, [pathName]);
 
   const route = (pathName: string) => {

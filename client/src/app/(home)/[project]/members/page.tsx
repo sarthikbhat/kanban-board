@@ -28,13 +28,15 @@ const Members: FC = () => {
   const [addMembersOpen, setaddMembersOpen] = useState(false);
   const [currentUser, setcurrentUser] = useState({} as IUser);
   const [projectResponse] = useApi(
-    '/project/get-project-by-name?projectName=' + decodeURI(pathName.split('/')[1].split('_')[0]),
+    '/project/get-project-by-name?projectName=' + decodeURI(pathName.split('/')[1].split('__')[0]),
     { method: 'GET' }
   );
 
-  useEffect(() => {
+useEffect(() => {
     if (projectResponse) {
-      setUsers([...projectResponse.data]);
+      console.log(projectResponse);
+      
+      setUsers([...projectResponse.data.users]);
       setcurrentUser(JSON.parse(window.localStorage.getItem('user') || '{}'));
     }
   }, [projectResponse]);
@@ -61,7 +63,7 @@ const Members: FC = () => {
   };
 
   const addUserToProject = async (user: IUser) => {
-    const payload = { ...{ projectName: decodeURI(pathName.split('/')[1].split('_')[0]) }, users: [...users, user] };
+    const payload = { ...{ projectName: decodeURI(pathName.split('/')[1].split('__')[0]) }, users: [...users, user] };
     API_UTIL.post('/project/save-project-users', payload).then((res) => {
       setUsers(res.data.users);
     });
@@ -69,7 +71,7 @@ const Members: FC = () => {
 
   const deleteUser = (user: IUser) => {
     API_UTIL.delete(
-      `/project/delete-project-user?projectName=${decodeURI(pathName.split('/')[1].split('_')[0])}&id=${user._id}`
+      `/project/delete-project-user?projectName=${decodeURI(pathName.split('/')[1].split('__')[0])}&id=${user._id}`
     ).then((res) => {
       setUsers(res.data);
     });
@@ -83,7 +85,7 @@ const Members: FC = () => {
           <AddMembersModal
             closeModal={closeModal}
             addUserToProject={addUserToProject}
-            projectName={decodeURI(pathName.split('/')[1].split('_')[0])}
+            projectName={decodeURI(pathName.split('/')[1].split('__')[0])}
           />
         </>
       )}

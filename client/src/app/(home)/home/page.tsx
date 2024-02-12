@@ -86,11 +86,11 @@ const Home: FC = () => {
           <div className="w-2/4 flex justify-center text-2xl text-[#395886] ml-4">Starred Projects</div>
           <div className="w-2/4 bg-[#395886]/30 h-[0.1px] ml-[20%] -mt-2"></div>
           {starredProjects.length ? (
-            <div className="flex w-3/5 gap-5 flex-wrap p-4 rounded ml-[19%] text-[#395886] font-medium tracking-wider -mt-2">
-              {starredProjects.slice(0, 4).map((project, index) => {
-                return <ProjectCard key={index} project={project} addToStarred={addToStarred} />;
+            <div className="flex w-[81%] gap-5 flex-wrap p-4 rounded ml-[19%] text-[#395886] font-medium tracking-wider -mt-2">
+              {starredProjects.slice(0, 3).map((project, index) => {
+                return <ProjectCard key={index} project={project} addToStarred={addToStarred} starred={true} />;
               })}
-              {starredProjects.length > 4 && (
+              {starredProjects.length > 3 && (
                 <div
                   onClick={() => router.push(`/home`)}
                   className="p-3 self-center flex shadow w-15 h-15 cursor-pointer rounded-full bg-[#D5DEEF]"
@@ -109,11 +109,11 @@ const Home: FC = () => {
           <div className="w-2/4 flex justify-center text-2xl text-[#395886]">My Projects</div>
           <div className="w-2/4 bg-[#395886]/30 h-[0.1px] ml-[20%] -mt-2"></div>
           {!!filteredProjects.length ? (
-            <div className="flex w-[65%] gap-5 flex-wrap p-4 rounded ml-[19%] -mt-2">
-              {filteredProjects.slice(0, 4).map((project, index) => {
+            <div className="flex w-[81%] gap-5 flex-wrap p-4 rounded ml-[19%] -mt-2">
+              {filteredProjects.slice(0, 3).map((project, index) => {
                 return <ProjectCard key={index} project={project} addToStarred={addToStarred} />;
               })}
-              {filteredProjects.length > 4 && (
+              {filteredProjects.length > 3 && (
                 <div
                   onClick={() => router.push(`/home`)}
                   className="p-3 self-center flex shadow w-15 h-15 cursor-pointer rounded-full bg-[#D5DEEF]"

@@ -11,7 +11,7 @@ const ProjectSettings: FC = () => {
   const [project, setproject] = useState({} as IProject);
   const pathName = usePathname();
   const [ response ] = useApi(
-    '/project/get-project-by-name?projectName=' + decodeURI(pathName.split('/')[1].split('_')[0]),
+    '/project/get-project-by-name?projectName=' + decodeURI(pathName.split('/')[1].split('__')[0]),
     { method: 'GET' }
   );
 

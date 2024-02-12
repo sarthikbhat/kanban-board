@@ -32,7 +32,7 @@ const Boards: FC = () => {
   const [dragStart, setdragStart] = useState('');
   const [task, settask] = useState({} as ITask);
   const [response, callApis] = useApi(
-    '/project/get-project-by-name?projectName=' + decodeURI(pathName.split('/')[1].split('_')[0]),
+    '/project/get-project-by-name?projectName=' + decodeURI(pathName.split('/')[1].split('__')[0]),
     { method: 'GET' }
   );
 
