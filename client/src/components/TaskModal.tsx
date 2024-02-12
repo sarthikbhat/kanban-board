@@ -210,7 +210,7 @@ const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId, 
             <div className="relative flex gap-2 flex-col">
               <div className="font-medium text-base text-[#395886]">Comments</div>
               <div className="w-[50%] h-px bg-[#395886]/50 mb-2"></div>
-              <div className="overflow-scroll h-[35vh]  pr-[5px] flex flex-col gap-[10px] mb-[2px] pb-[10px] scroll-smooth">
+              <div className="overflow-scroll h-[33vh]  pr-[5px] flex flex-col gap-[10px] mb-[2px] pb-[20px] scroll-smooth">
                 <div key="newCommentKey" className="relative flex flex-col">
                   <CommentInput
                     key="newComment"
