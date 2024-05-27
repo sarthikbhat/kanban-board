@@ -35,7 +35,7 @@ export async function generateMetadata({ params, searchParams }: Props, parent: 
     title: 'Flashbacksss',
     openGraph: {
       title: 'sdsdsd',
-      images: [{ url: `https://flashbackimagesthumbnail.s3.ap-south-1.amazonaws.com/Aarthi_Vinay_19122021/${params.userId}.jpg` }]
+      images: [{ url: `"https://flashbackuserthumbnails.s3.ap-south-1.amazonaws.com${params.userId}.jpg` }]
     }
   };
 }
