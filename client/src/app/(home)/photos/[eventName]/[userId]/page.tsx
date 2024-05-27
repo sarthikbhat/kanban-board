@@ -35,7 +35,7 @@ export async function generateMetadata({ params, searchParams }: Props, parent: 
     title: 'Flashbacksss',
     openGraph: {
       title: 'sdsdsd',
-      images: [{ url: `https://flashbackuserthumbnails.s3.ap-south-1.amazonaws.com/${params.userId}.jpg` }]
+      images: [{ url: `https://rekognitionuserfaces.s3.amazonaws.com/thumbnails/${params.userId}.jpg` }]
     }
   };
 }
