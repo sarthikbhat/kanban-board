@@ -70,11 +70,11 @@ useEffect(() => {
   };
 
   const deleteUser = (user: IUser) => {
-    API_UTIL.delete(
-      `/project/delete-project-user?projectName=${decodeURI(pathName.split('/')[1].split('__')[0])}&id=${user._id}`
-    ).then((res) => {
-      setUsers(res.data);
-    });
+    // API_UTIL.delete(
+    //   `/project/delete-project-user?projectName=${decodeURI(pathName.split('/')[1].split('__')[0])}&id=${user._id}`
+    // ).then((res) => {
+    //   setUsers(res.data);
+    // });
   };
 
   return (
@@ -140,6 +140,7 @@ useEffect(() => {
                   Admin {e.fullName === currentUser?.fullName ? "(It's You)" : ''}
                 </div>
                 <div
+                  
                   onClick={() => deleteUser(e)}
                   className="text-sm flex group items-center font-medium p-2 text-slate-600 hover:text-red-500 hover:bg-slate-100 transition ease-in hover:rounded--md cursor-pointer"
                 >

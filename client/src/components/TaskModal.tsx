@@ -39,7 +39,7 @@ interface IModalProps {
 }
 
 const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId, columns }) => {
-  const { handleSubmit, setValue, control } = useForm({ mode: 'onTouched', resolver: TaskSchemaResolver });
+  const { handleSubmit, setValue, control, watch } = useForm({ mode: 'all', resolver: TaskSchemaResolver });
 
   const [originalTask, setoriginalTask] = useState({} as ITask);
   const [comments, setcomments] = useState({} as Record<string | number, IComment>);
@@ -56,8 +56,9 @@ const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId, 
   }, []);
 
   useEffect(() => {
-    setValue('project', pathName.split('/')[1].split('_')[1]);
+    setValue('project', pathName.split('/')[1].split('_')[2]);
     setValue('column', columnId);
+    // setValue('column', columns.filter((e: IColumns) => e._id === columnId)[0].columnName);
   }, [pathName]);
 
   useEffect(() => {
@@ -297,7 +298,7 @@ const TaskModal: FC<IModalProps> = ({ closeModal, task, projectUsers, columnId, 
             />
             <CustomSelect
               displayLabel={true}
-              id="state"
+              id="column"
               label="State"
               extraCssForLabel="text-[0.8vw]"
               disabled={true}
